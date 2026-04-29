@@ -1,0 +1,13 @@
+/LMS-admin/node_modules
+/LMS-client/node_modules
+/LMS-server/node_modules
+
+
+/LMS-admin/.env
+/LMS-client/.env
+/LMS-server/.env
+
+
+/LMS-admin/build
+/LMS-client/build
+/LMS-server/build

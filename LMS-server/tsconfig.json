@@ -1,0 +1,22 @@
+// {
+//   "compilerOptions": {
+//     "target": "ES2020",
+//     "module": "commonjs",
+//     "strict": true,
+//     "esModuleInterop": true,
+//     "skipLibCheck": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "outDir": "./dist"
+//   },
+//   "include": [
+//     "./**/*.ts",
+//     "src/configs/database.config.js",
+//     "src/middlewares/database.middleware.js",
+//     "src/models/userModel.js",
+//     "src/routes/userRoute.js",
+//     "src/server.js"
+//   ],
+//   "exclude": [
+//     "node_modules"
+//   ]
+// }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to LMS</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+        }
+
+        .logo {
+            text-align: center;
+        }
+
+        .email-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #4CAF50;
+        }
+
+        p {
+            color: #555;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #aaa;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="email-container">
+        <h2>Welcome, {{organizationName}}! 🎉</h2>
+        <div class="logo">
+            <img src={{logo}} alt="">
+        </div>
+        <p>Your organization has been successfully registered on our LMS platform.</p>
+        <p><strong>Organization Code:</strong> {{organizationCode}}</p>
+        <p><strong>Country:</strong> {{country}}</p>
+        <p><strong>Place:</strong> {{place}}</p>
+
+        <p>Thank you for joining us. Let's build a great learning experience together!</p>
+
+        <div class="footer">
+            &copy; 2025 LMS Team
+        </div>
+    </div>
+
+</body>
+
+</html>

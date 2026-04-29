@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your OTP for Verification</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #6a1b9a, #8e24aa, #ab47bc);
+            /* Gradient purple background */
+            background-size: cover;
+            height: 100vh;
+            color: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .email-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            color: #333333;
+        }
+
+        h2 {
+            color: #333333;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #333333;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .otp-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            text-align: center;
+            color: #6a1b9a;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .footer-text {
+            color: #333333;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+
+        .footer-text p {
+            margin: 5px 0;
+        }
+
+        .btn {
+            background-color: #6a1b9a;
+            /* Deep purple color for the button */
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #8e24aa;
+            /* Lighter purple on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <table role="presentation">
+        <tr>
+            <td>
+                <div class="email-container">
+                    <h2>OTP Verification</h2>
+                    <p>We have received a request to verify your account. Please use the following OTP to complete the
+                        process:</p>
+
+                    <div class="otp-container">
+                        OTP: <span>{{otp}}</span>
+                    </div>
+
+                    <p>This OTP is valid for the next 1 minute. If you did not request this, please ignore this email.
+                    </p>
+
+                    <p>If you need assistance, feel free to reach out to us.</p>
+
+                    {{!-- <a href="https://yourportal.com/verify" class="btn">Verify Your Account</a> --}}
+
+                    <div class="footer-text">
+                        <p>Best regards,</p>
+                        <p>The Futura Labs Team</p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
