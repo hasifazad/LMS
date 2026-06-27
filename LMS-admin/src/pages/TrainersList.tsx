@@ -10,7 +10,7 @@ type Column<T extends RowData> = {
     render?: (value: any, row: T, rowIndex: number) => React.ReactNode;
 };
 
-export default function MentorsList() {
+export default function TrainersList() {
 
     type User = {
         id: number;

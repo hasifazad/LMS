@@ -26,7 +26,7 @@ export default function Table<T extends RowData>({
     skeletonRows = 5
 }: TableProps<T>) {
     return (
-        <div className="m-10 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
             <table className="min-w-full text-sm">
                 <thead>
                     <tr className="border-b border-slate-200 bg-slate-100">

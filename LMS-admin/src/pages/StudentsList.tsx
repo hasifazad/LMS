@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Table from "../components/common/Table";
 import { getStudents } from "../services";
+import { Link, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 type RowData = Record<string, any>;
 
@@ -12,8 +14,10 @@ type Column<T extends RowData> = {
 
 export default function StudentsList() {
 
+    let navigate = useNavigate()
+
     type User = {
-        id: number;
+        _id: number;
         enrollmentNumber: string;
         firstName: string;
         lastName: string;
@@ -37,6 +41,17 @@ export default function StudentsList() {
                 </span>
             ),
         },
+        {
+            key: '_id',
+            header: '',
+            render: (value) => (
+                <button
+                    onClick={() => navigate(`/admin/students/update/${value}`)}
+                    className={`cursor-pointer border-gray-500 px-2 py-1 rounded-md bg-green-300 text-xs`}>
+                    Edit
+                </button>
+            ),
+        },
     ];
 
 
@@ -47,7 +62,7 @@ export default function StudentsList() {
             try {
                 setLoading(true);
 
-               
+
 
                 const studentsList = await getStudents();
                 setStudents(studentsList.data);
@@ -67,6 +82,19 @@ export default function StudentsList() {
 
     return (
         <>
+            <div className="mb-6 flex justify-end">
+                <button
+                    onClick={() => navigate("/admin/students/create")}
+                    className="cursor-pointer group inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-all duration-200 hover:border-gray-300 hover:bg-gray-50 hover:text-black"
+                >
+                    <Plus
+                        size={16}
+                        className="transition-transform duration-200 group-hover:rotate-90"
+                    />
+
+                    <span>Add Student</span>
+                </button>
+            </div>
             <Table<User> columns={columns} data={students} loading={loading} />
 
         </>
