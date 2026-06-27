@@ -42,6 +42,8 @@ module.exports = {
      */
     createStudent: async (req, res, next) => {
 
+        console.log(req.body);
+
         let { firstName, lastName, email, mobileNumber } = req.body
 
         try {
@@ -58,12 +60,12 @@ module.exports = {
             let password = generateRandomPassword();   // generats a random password
             const hashedPassword = await argon2.hash(password);   //hash the password
 
-            const counter = await Student(req.db).find().count()
+            const studentCount = await Student(req.db).find().count()
 
-            console.log(counter);
+            console.log(studentCount);
 
 
-            const enrollmentNumber = "STU" + counter.studentCount;
+            const enrollmentNumber = "STU" + studentCount;
 
             await Student(req.db).create({
                 firstName,
@@ -100,6 +102,10 @@ module.exports = {
             return res.status(201).json({
                 success: true,
                 message: "Student created successfully",
+                data: {
+                    password,
+                    enrollmentNumber
+                }
             });
 
         } catch (error) {
@@ -374,7 +380,7 @@ module.exports = {
     getAllStudents: async (req, res, next) => {
 
         console.log('helloo');
-        
+
 
         try {
 
@@ -746,6 +752,10 @@ module.exports = {
 
         let { mentorId } = req.query;
 
+
+        console.log(mentorId);
+
+
         try {
 
             // Validate request query parameters
@@ -756,18 +766,98 @@ module.exports = {
                 });
             }
 
-            const queryConditions = [];
+            mentorId = new mongoose.Types.ObjectId(mentorId)
+            let students = await Student(req.db).aggregate([
+                {
+                    $match: { mentor: mentorId }
+                },
+                {
+                    $lookup: {
+                        from: "staffs",
+                        localField: "mentor",
+                        foreignField: "_id",
+                        as: "mentor",
+                        pipeline: [
+                            {
+                                "$project": {
+                                    "_id": 1,
+                                    "email": 1,
+                                    "firstName": 1,
+                                    "lastName": 1,
+                                }
+                            }
+                        ]
+                    }
+                },
+                { $unwind: { path: "$mentor", preserveNullAndEmptyArrays: true } },
 
+                // Lookup Batch Details
+                {
+                    $lookup: {
+                        from: "batches",
+                        localField: "batch",
+                        foreignField: "_id",
+                        as: "batch",
+                        pipeline: [
+                            {
+                                "$project": {
+                                    "_id": 1,
+                                    "batchName": 1,
+                                    "batchCode": 1,
 
+                                }
+                            }
+                        ]
+                    }
+                },
+                { $unwind: { path: "$batch", preserveNullAndEmptyArrays: true } },
 
-            if (mentorId) {
-                queryConditions.push({ mentorId });
-            }
+                // Lookup Course Details (from batch)
+                {
+                    $lookup: {
+                        from: "courses",
+                        localField: "course",
+                        foreignField: "_id",
+                        as: "course",
+                        pipeline: [
+                            {
+                                "$project": {
+                                    "_id": 1,
+                                    "courseName": 1,
+                                    "courseCode": 1,
 
-            // Fetch students based on query conditions
-            const students = await Student(req.db).find({
-                $or: queryConditions,
-            });
+                                }
+                            }
+                        ]
+                    }
+                },
+                { $unwind: { path: "$course", preserveNullAndEmptyArrays: true } },
+
+                // Project only required fields
+                {
+                    $project: {
+                        _id: 1,
+                        email: 1,
+                        mobileNumber: 1,
+                        firstName: 1,
+                        lastName: 1,
+                        isBlocked: 1,
+                        status: 1,
+                        profilePicture: 1,
+                        enrollmentNumber: 1,
+                        github: 1,
+                        linkedin: 1,
+                        guardianName: 1,
+                        guardianMobileNumber: 1,
+                        resume: 1,
+                        mentor: 1,
+                        batch: 1,
+                        course: 1,
+                    }
+                }
+            ]);
+            console.log(students);
+
 
             if (students.length === 0) {
                 return res.status(404).json({

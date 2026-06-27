@@ -27,16 +27,29 @@ app.use(morgan('dev')); // Log requests to console
 
 const connectMainDB = async () => {
     try {
-        const connection = await mongoose.connect(process.env.MONGO_URI);
+        const connection = await mongoose.connect('mongodb://localhost:27017/');
         console.log('✅ Connected to Main DB');
         return connection;
     } catch (error) {
         console.error('❌ Main DB connection failed:');
-        
+
     }
 };
 connectMainDB()
 
+// setInterval(async () => {
+//     console.log("State:", mongoose.connection.readyState);
+
+//     try {
+//         const adminDb = mongoose.connection.db.admin();
+//         const status = await adminDb.serverStatus();
+
+//         console.log("Connections:", status.connections);
+//     } catch (err) {
+//         console.log("Error fetching connections:", err.message);
+//     }
+
+// }, 2000);
 
 
 

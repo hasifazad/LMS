@@ -87,6 +87,8 @@ module.exports = {
             if (day) {
                 filter.day = { $in: [day] }; // Check if the provided day exists in the `day` array
             }
+            console.log(filter);
+
             const batches = await Batch(req.db).aggregate([
                 { $match: filter }, // Apply dynamic filters
 

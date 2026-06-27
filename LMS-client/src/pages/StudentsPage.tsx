@@ -77,7 +77,8 @@ let StudentsPage: React.FC = () => {
 
 
             try {
-                let results = await fetchData.get('/student')
+                let results = await fetchData.get(`/student/by-mentor?mentorId=${'68f4a1c6df2d0db135e0c831'}`)
+                console.log(results);
 
 
                 setStudentsList(results.data.data)
@@ -149,13 +150,13 @@ let StudentsPage: React.FC = () => {
 
 
                                             {/* Mentor Name */}
-                                            <p className="text-sm font-medium text-gray-700">
+                                            {/* <p className="text-sm font-medium text-gray-700">
                                                 Mentor : {student?.mentor?.firstName ? student?.mentor?.firstName + ' ' + student?.mentor?.lastName : 'N/A'}
-                                            </p>
+                                            </p> */}
 
                                             {/* Batch Name */}
                                             <p className="text-sm text-gray-500">
-                                                Batch : {student?.batch?.batchNAme || 'N/A'}
+                                                Batch : {student?.batch?.batchCode || 'N/A'}
                                             </p>
 
                                             {/* Course Name */}

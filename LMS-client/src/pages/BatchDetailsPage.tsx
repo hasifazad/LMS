@@ -115,8 +115,13 @@ const BatchDetailsPage: React.FC = () => {
                         <p className="text-lg font-medium text-gray-900">{converToDate(batch.endDate)}</p>
                     </div>
                     <div className="bg-white">
-                        <p className="text-sm text-gray-500">📆 Days</p>
-                        <p className="text-lg font-medium text-gray-900">{batch.day?.join(' - ')}</p>
+                        <p className="text-sm text-gray-500 mb-4">📆 Days</p>
+                        {
+                            batch.day?.map((d: String, i) => (
+                                <span className="bg-slate-200 text-md mr-2 font-normal text-gray-900 border px-2 py-1 rounded-3xl">{d?.slice(0, 3)}</span>
+                            ))
+                        }
+
                     </div>
                     <div className="bg-white">
                         <p className="text-sm text-gray-500">⏰ Time</p>

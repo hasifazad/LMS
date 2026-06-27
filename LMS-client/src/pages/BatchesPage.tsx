@@ -20,7 +20,7 @@ const BatchesPage: React.FC = () => {
 
 
             try {
-                let results = await fetchData.get('/batch')
+                let results = await fetchData.get(`/batch?mentorId=${'68f4a1c6df2d0db135e0c831'}`)
 
 
                 setBatches(results.data.data)
