@@ -90,8 +90,8 @@ const StudentProjects = () => {
                                 {/* Status */}
                                 <div
                                     className={`rounded-xl px-4 py-2 text-xs font-medium ${project.projectStatus === "complete"
-                                            ? "bg-black text-white"
-                                            : "bg-gray-100 text-gray-700"
+                                        ? "bg-black text-white"
+                                        : "bg-gray-100 text-gray-700"
                                         }`}
                                 >
                                     {project.projectStatus}
@@ -105,7 +105,7 @@ const StudentProjects = () => {
                                 {/* Links */}
                                 {project.githubUrl && (
                                     <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-xs font-medium text-gray-700">
-                                        <Github size={14} />
+                                        <Globe size={14} />
 
                                         GitHub
                                     </div>
