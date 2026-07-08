@@ -4,6 +4,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 import certificate from '../../assets/certificate.png'
+import { useAuthStore } from "../../stores/authStore";
 
 type CertificateProps = {
     studentName?: string;
@@ -21,6 +22,9 @@ const Certificate: React.FC<CertificateProps> = ({
     instructorName = "Job Junction",
 }) => {
     const certificateRef = useRef<HTMLDivElement>(null);
+
+
+    const { user } = useAuthStore();
 
     const downloadCertificate = async () => {
         if (!certificateRef.current) return;
@@ -50,7 +54,7 @@ const Certificate: React.FC<CertificateProps> = ({
         >
             {/* Certificate */}
 
-            <div  ref={certificateRef} className="relative w-[1100px] h-[780px]">
+            <div ref={certificateRef} className="relative w-[1100px] h-[780px]">
 
                 {/* Background Template */}
                 <img
@@ -61,7 +65,7 @@ const Certificate: React.FC<CertificateProps> = ({
 
                 {/* Dynamic Name */}
                 <h1 className="absolute top-[280px] left-1/2 -translate-x-1/2 text-5xl font-normal font-serif italic">
-                    {studentName}
+                    {user.firstName + " " + user.lastName}
                 </h1>
 
                 {/* Course */}

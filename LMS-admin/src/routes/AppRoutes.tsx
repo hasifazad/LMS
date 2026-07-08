@@ -34,6 +34,7 @@ import StudentRoutes from "./StudentRoutes";
 import NotFound from "../pages/NotFound";
 import Login from "../pages/auth/Login";
 import AdminLoginPage from "../pages/auth/Login";
+import HomePage from "../pages/HomePage";
 
 
 
@@ -50,7 +51,7 @@ const AppRoutes = () => {
             <Route path="/student/*" element={<StudentRoutes />} />
 
             {/* Default Redirect */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/" element={<HomePage />} />
 
             {/* 404 */}
             <Route path="*" element={<NotFound />} />

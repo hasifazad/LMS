@@ -12,10 +12,15 @@ import AssignmentDetails from "../pages/student/AssignmentDetails";
 import Certificate from "../pages/student/CertificatePage";
 import StudentAttendance from "../pages/student/StudentsAttendance";
 import StudentProjects from "../pages/student/StudentProjects";
+import StudentLoginPage from "../pages/student/StudentLoginPage";
 
 const StudentRoutes = () => {
     return (
         <ProtectedRoute allowedRoles={["student"]}>
+            <Routes>
+
+                <Route path="/login" element={<StudentLoginPage />} />
+            </Routes>
             <StudentLayout>
                 <Routes>
                     <Route path="/" element={<StudentDashboard />} />

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/axios";
 import { converToDate } from "../../utils/DateFormatConverter";
+import { useAuthStore } from "../../stores/authStore";
 
 // const assignments = [
 //     {
@@ -25,12 +26,14 @@ const AssignmentsPage = () => {
     const navigate = useNavigate();
 
 
+    const { user, logout } = useAuthStore();
+
     let [assignments, setAssignments] = useState([])
     useEffect(() => {
 
         (async () => {
             try {
-                let response = await api.get('/student/68f4ac7a1224e6533c1557f0/assignment')
+                let response = await api.get(`/student/${user._id}/assignment`)
                 setAssignments(response.data.data)
                 console.log(response.data.data);
 
@@ -53,7 +56,7 @@ const AssignmentsPage = () => {
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-semibold text-gray-900">
-                        Assignments
+                        Assignments {user._id}
                     </h1>
 
                     <p className="mt-2 text-sm text-gray-500">

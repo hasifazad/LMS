@@ -13,6 +13,7 @@ import {
     MessageSquare,
     Settings,
 } from "lucide-react";
+import { useAuthStore } from "../stores/authStore";
 
 interface StudentLayoutProps {
     children: ReactNode;
@@ -69,6 +70,7 @@ const sidebarItems = [
 const StudentLayout = ({
     children,
 }: StudentLayoutProps) => {
+    const { user, logout } = useAuthStore();
     return (
         <div className="min-h-screen bg-[#f8fafc] flex">
             {/* Sidebar */}
@@ -119,7 +121,7 @@ const StudentLayout = ({
                 <div className="flex flex-col justify-between gap-4 border border-gray-200 bg-white p-2 lg:flex-row lg:items-center px-10 py-5">
                     <div>
                         <h1 className="text-3xl font-semibold text-gray-900">
-                            Welcome Back, Hasif 👋
+                            Welcome Back, {user?.firstName}👋
                         </h1>
 
                         <p className="mt-2 text-sm text-gray-500">
@@ -131,7 +133,7 @@ const StudentLayout = ({
                     {/* Profile */}
                     <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-gray-50 p-3">
                         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-lg font-semibold text-white">
-                            HA
+                            {user?.firstName[0] + user?.lastName[0]}
                         </div>
 
                         <div>
