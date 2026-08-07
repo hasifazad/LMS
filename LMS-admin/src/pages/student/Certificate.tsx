@@ -5,6 +5,7 @@ import jsPDF from "jspdf";
 
 import certificate from '../../assets/certificate.png'
 import { useAuthStore } from "../../stores/authStore";
+import { Navigate } from "react-router-dom";
 
 type CertificateProps = {
     studentName?: string;
@@ -47,6 +48,12 @@ const Certificate: React.FC<CertificateProps> = ({
         pdf.save(`${studentName}-certificate.pdf`);
     };
 
+    if (!user) {
+        return (
+            <Navigate to={'/student/login'} />
+        )
+    }
+
     return (
         <div
             className="flex flex-col items-center gap-6 p-6 min-h-screen"
@@ -65,7 +72,7 @@ const Certificate: React.FC<CertificateProps> = ({
 
                 {/* Dynamic Name */}
                 <h1 className="absolute top-[280px] left-1/2 -translate-x-1/2 text-5xl font-normal font-serif italic">
-                    {user.firstName + " " + user.lastName}
+                    {user?.firstName + " " + user?.lastName}
                 </h1>
 
                 {/* Course */}

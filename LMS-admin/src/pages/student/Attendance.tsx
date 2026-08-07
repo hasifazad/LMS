@@ -28,6 +28,9 @@ import {
     XCircle,
 } from "lucide-react";
 import { getStudentAttendance } from "../../services";
+import Loading from "../../components/common/Loading";
+import { useAuthStore } from "../../stores/authStore";
+import { Navigate } from "react-router-dom";
 
 /* -------------------------------------------------------------------------- */
 /*                                   TYPES                                    */
@@ -68,6 +71,10 @@ const StudentAttendance = () => {
 
     const [selectedDate, setSelectedDate] = useState("");
 
+
+    let { user } = useAuthStore()
+
+
     /* ---------------------------------------------------------------------- */
     /*                                API CALL                                */
     /* ---------------------------------------------------------------------- */
@@ -77,9 +84,9 @@ const StudentAttendance = () => {
             try {
                 setLoading(true);
 
-                const data: AttendanceResponse = await getStudentAttendance('68f4ac7a1224e6533c1557ed')
+                const data: AttendanceResponse = await getStudentAttendance(user._id)
 
-                
+
 
                 if (data.success) {
                     setAttendanceData(data.data.attendanceRecords);
@@ -207,17 +214,17 @@ const StudentAttendance = () => {
 
     if (loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gray-50">
-                <p className="text-sm text-gray-500">
-                    Loading attendance...
-                </p>
-            </div>
+            <Loading />
         );
     }
 
     /* ---------------------------------------------------------------------- */
     /*                                 RETURN                                 */
     /* ---------------------------------------------------------------------- */
+
+    if (!user) {
+        return <Navigate to={'/student/login'} />
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 p-6">

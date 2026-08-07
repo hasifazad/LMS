@@ -33,7 +33,8 @@ const {
     getProject,
     addProjectReview,
     updateProjectReview,
-    deleteProjectReview
+    deleteProjectReview,
+    getProjectById
 } = require('../controllers/student.controller');
 
 
@@ -45,6 +46,8 @@ router.post('/:studentId/project', createProject);
 router.get('/:studentId/project', getProject);
 router.put('/:studentId/project/:projectId', updateProject);
 router.delete('/:studentId/project/:projectId', deleteProject);
+
+router.get('/project/:projectId', getProjectById);
 
 router.put('/:studentId/project/:projectId/review', addProjectReview);
 router.patch('/:studentId/project/:projectId/review/:reviewId', updateProjectReview);

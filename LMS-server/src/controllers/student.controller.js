@@ -1501,6 +1501,21 @@ module.exports = {
             res.status(500).json({ error: err.message });
         }
     },
+    getProjectById: async (req, res, next) => {
+        try {
+            const { projectId } = req.params;
+            console.log(projectId);
+
+            const project = await StudentProject(req.db).findOne({ _id: projectId });
+
+
+
+            if (!project) return res.status(404).json({ message: 'Project not found' });
+            res.json({ data: project });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    },
     addProjectReview: async (req, res, next) => {
         try {
             const { studentId, projectId } = req.params;

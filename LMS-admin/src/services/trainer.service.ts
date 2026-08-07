@@ -1,7 +1,9 @@
-import api from "./axios";
+import api from "./api";
 
 export const getMentors = async () => {
   const response = await api.get("/staff/mentor/all");
+ 
+  
   return response.data;
 };
 

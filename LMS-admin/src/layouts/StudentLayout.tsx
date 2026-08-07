@@ -63,7 +63,7 @@ const sidebarItems = [
     {
         name: "Settings",
         icon: Settings,
-        path: "/student/settings",
+        path: "/student/setting",
     },
 ];
 
@@ -87,6 +87,7 @@ const StudentLayout = ({
                             <NavLink
                                 key={item.path}
                                 to={item.path}
+                                end={item.path === '/student'}
                                 className={({ isActive }) =>
                                     `flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200
                   ${isActive

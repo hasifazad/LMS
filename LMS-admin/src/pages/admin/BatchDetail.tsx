@@ -12,6 +12,8 @@ import {
     Plus,
 
 } from "lucide-react";
+import { getBatchStudents } from "../../services/batch.service";
+import Loading from "../../components/common/Loading";
 
 /* -------------------------------------------------------------------------- */
 /*                                   TYPES                                    */
@@ -106,35 +108,25 @@ type BatchResponse = {
 /* -------------------------------------------------------------------------- */
 
 const BatchDetails = () => {
+
     const { id } = useParams();
-
-    const [batch, setBatch] = useState<Batch | null>(
-        null
-    );
-
+    const [batch, setBatch] = useState<Batch | null>(null);
     const [loading, setLoading] = useState(true);
 
-    /* ---------------------------------------------------------------------- */
-    /*                                API CALL                                */
-    /* ---------------------------------------------------------------------- */
+
 
     useEffect(() => {
         const fetchBatch = async () => {
             try {
                 setLoading(true);
 
-                const response = await fetch(
-                    `http://localhost:3000/api/v1/batch/${id}/students`
-                );
-
-                const data: BatchResponse =
-                    await response.json();
+                const data = await getBatchStudents(id);
 
                 setBatch(data.data);
-            } catch (error) {
-                console.log(error);
-            } finally {
                 setLoading(false);
+            } catch (error) {
+                console.error("Failed to fetch batch students:", error);
+            } finally {
             }
         };
 
@@ -143,17 +135,10 @@ const BatchDetails = () => {
         }
     }, [id]);
 
-    /* ---------------------------------------------------------------------- */
-    /*                                 LOADING                                */
-    /* ---------------------------------------------------------------------- */
 
     if (loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gray-50">
-                <p className="text-sm text-gray-500">
-                    Loading batch details...
-                </p>
-            </div>
+            <Loading />
         );
     }
 
@@ -161,23 +146,23 @@ const BatchDetails = () => {
     /*                              NOT FOUND                                 */
     /* ---------------------------------------------------------------------- */
 
-    if (!batch) {
-        return (
-            <div className="flex min-h-screen items-center justify-center bg-gray-50">
-                <p className="text-sm text-red-500">
-                    Batch not found
-                </p>
-            </div>
-        );
-    }
+    // if (!batch) {
+    //     return (
+    //         <div className="flex min-h-screen items-center justify-center bg-gray-50">
+    //             <p className="text-sm text-red-500">
+    //                 Batch not found
+    //             </p>
+    //         </div>
+    //     );
+    // }
 
     /* ---------------------------------------------------------------------- */
     /*                                 RETURN                                 */
     /* ---------------------------------------------------------------------- */
-    
+
     return (
         <div className="min-h-screen bg-gray-50 p-6">
-            
+
             <div className="mx-auto max-w-7xl space-y-6">
                 {/* ---------------------------------------------------------------- */}
                 {/* HEADER */}
@@ -373,21 +358,7 @@ const BatchDetails = () => {
                 {/* ---------------------------------------------------------------- */}
 
                 <div className="rounded-3xl border border-gray-200 bg-white p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h2 className="text-xl font-semibold text-gray-900">
-                                Students
-                            </h2>
 
-                            <p className="mt-1 text-sm text-gray-500">
-                                Students enrolled in this batch
-                            </p>
-                        </div>
-
-                        <div className="rounded-2xl bg-black px-4 py-2 text-sm font-medium text-white">
-                            {batch.students.length} Students
-                        </div>
-                    </div>
 
                     <div className="mt-6 grid grid-cols-1 gap-5 xl:grid-cols-2">
                         {batch.students.map((student) => (
@@ -431,72 +402,9 @@ const BatchDetails = () => {
                                 </div>
 
                                 {/* Contact */}
-                                <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-                                    {/* Email */}
-                                    <div className="flex items-center gap-3 rounded-2xl border border-gray-200 bg-white p-4">
-                                        <Mail
-                                            size={16}
-                                            className="text-gray-500"
-                                        />
 
-                                        <div>
-                                            <p className="text-xs text-gray-500">
-                                                Email
-                                            </p>
 
-                                            <p className="mt-1 text-sm font-medium text-gray-800">
-                                                {student.email}
-                                            </p>
-                                        </div>
-                                    </div>
 
-                                    {/* Phone */}
-                                    <div className="flex items-center gap-3 rounded-2xl border border-gray-200 bg-white p-4">
-                                        <Phone
-                                            size={16}
-                                            className="text-gray-500"
-                                        />
-
-                                        <div>
-                                            <p className="text-xs text-gray-500">
-                                                Mobile
-                                            </p>
-
-                                            <p className="mt-1 text-sm font-medium text-gray-800">
-                                                {student.mobileNumber}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Links */}
-                                <div className="mt-5 flex flex-wrap items-center gap-3">
-                                    {student.github && (
-                                        <a
-                                            href={student.github}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="inline-flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
-                                        >
-                                            {/* <Github size={16} /> */}
-
-                                            GitHub
-                                        </a>
-                                    )}
-
-                                    {student.linkedin && (
-                                        <a
-                                            href={student.linkedin}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="inline-flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
-                                        >
-                                            {/* <Linkedin size={16} /> */}
-
-                                            LinkedIn
-                                        </a>
-                                    )}
-                                </div>
                             </div>
                         ))}
                     </div>
@@ -507,3 +415,44 @@ const BatchDetails = () => {
 };
 
 export default BatchDetails;
+
+
+// <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+//     {/* Email */}
+//     <div className="flex items-center gap-3 rounded-2xl border border-gray-200 bg-white p-4">
+//         <Mail
+//             size={16}
+//             className="text-gray-500"
+//         />
+
+//         <div>
+//             <p className="text-xs text-gray-500">
+//                 Email
+//             </p>
+
+//             <p className="mt-1 text-sm font-medium text-gray-800">
+//                 {student.email}
+//             </p>
+//         </div>
+//     </div>
+
+//     {/* Phone */}
+//     <div className="flex items-center gap-3 rounded-2xl border border-gray-200 bg-white p-4">
+//         <Phone
+//             size={16}
+//             className="text-gray-500"
+//         />
+
+//         <div>
+//             <p className="text-xs text-gray-500">
+//                 Mobile
+//             </p>
+
+//             <p className="mt-1 text-sm font-medium text-gray-800">
+//                 {student.mobileNumber}
+//             </p>
+//         </div>
+//     </div>
+// </div>
+
+

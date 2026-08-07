@@ -53,6 +53,9 @@ const PersonalDetailsForm = () => {
 
     let { id } = useParams()
 
+    console.log(id);
+    
+
 
     const handleSubmit = async (values: typeof initialValues) => {
         console.log(values);

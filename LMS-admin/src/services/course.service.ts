@@ -1,4 +1,4 @@
-import api from "./axios";
+import api from "./api";
 
 export const getAllCourses = async () => {
   const response = await api.get("/course");

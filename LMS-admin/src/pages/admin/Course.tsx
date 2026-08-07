@@ -7,7 +7,7 @@ import {
     getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { getAllCourses } from "../../services/courseServices";
+import { getAllCourses } from "../../services/course.service";
 
 type Course = {
     _id: string;
@@ -48,7 +48,7 @@ const columns: ColumnDef<Course>[] = [
 const CourseTable = () => {
 
 
-    let [students, setStudents] = useState([])
+    let [courses, setCourses] = useState([])
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchStudents = async () => {
@@ -57,8 +57,8 @@ const CourseTable = () => {
 
 
 
-                const studentsList = await getAllCourses();
-                setStudents(studentsList.data);
+                const courseList = await getAllCourses();
+                setCourses(courseList.data);
                 setLoading(false);
 
 
@@ -73,7 +73,7 @@ const CourseTable = () => {
     }, [])
 
     const table = useReactTable({
-        data: students,
+        data: courses,
         columns,
         getCoreRowModel: getCoreRowModel(),
     });

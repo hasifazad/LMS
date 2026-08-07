@@ -5,26 +5,88 @@ import {
     FileText,
 } from "lucide-react";
 
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
+import { useAuthStore } from "../../stores/authStore";
+import { useEffect, useState } from "react";
+import { getSingleStudentAssignment, getStudentAssignments } from "../../services";
+import Loading from "../../components/common/Loading";
 
-const assignment = {
-    _id: "1",
-    title: "React Authentication",
-    description:
-        "Build a complete authentication flow using JWT authentication, protected routes, login and registration pages.",
-    startDate: "2026-08-10",
-    submissionDate: "2026-08-15",
-    grade: "A",
-    feedback:
-        "Good implementation. Improve form validation structure.",
-    fileUrl: "#",
-    status: "submitted",
-};
+// const assignment = {
+//     _id: "1",
+//     title: "React Authentication",
+//     description:
+//         "Build a complete authentication flow using JWT authentication, protected routes, login and registration pages.",
+//     startDate: "2026-08-10",
+//     submissionDate: "2026-08-15",
+//     grade: "A",
+//     feedback:
+//         "Good implementation. Improve form validation structure.",
+//     fileUrl: "#",
+//     status: "submitted",
+// };
+
+export interface Assignment {
+    _id: string;
+    title: string;
+    description: string;
+    startDate: string;
+    submissionDate: string;
+    grade: string;
+    feedback: string;
+    fileUrl: string | null;
+    status: string;
+}
 
 const AssignmentDetails = () => {
     const { id } = useParams();
 
-    console.log(id);
+    let { user } = useAuthStore()
+
+    const [assignment, setAssignment] = useState<Assignment>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        const fetchAssignments = async () => {
+            try {
+                setLoading(true);
+                setError("");
+
+                const data = await getSingleStudentAssignment(
+                    user._id,
+                    id
+                );
+
+
+                setAssignment(data);
+            } catch (error: any) {
+                setError(
+                    error.response?.data?.message ||
+                    "Failed to load assignments."
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+
+
+        fetchAssignments();
+
+    }, [user?._id]);
+
+
+    if (loading) {
+        return (
+            <Loading />
+        )
+    }
+
+    if (!user) {
+        return (
+            <Navigate to={'/student/login'} />
+        )
+    }
+
 
     return (
         <div className="min-h-screen bg-gray-50 p-6">
@@ -39,22 +101,22 @@ const AssignmentDetails = () => {
                             </div>
 
                             <h1 className="text-3xl font-semibold text-gray-900">
-                                {assignment.title}
+                                {assignment?.title}
                             </h1>
 
                             <p className="mt-4 max-w-3xl text-sm leading-7 text-gray-500">
-                                {assignment.description}
+                                {assignment?.description}
                             </p>
                         </div>
 
                         {/* Status */}
                         <div
                             className={`rounded-2xl px-5 py-3 text-sm font-medium ${assignment.status === "submitted"
-                                    ? "bg-gray-900 text-white"
-                                    : "bg-gray-100 text-gray-700"
+                                ? "bg-gray-900 text-white"
+                                : "bg-gray-100 text-gray-700"
                                 }`}
                         >
-                            {assignment.status}
+                            {assignment?.status}
                         </div>
                     </div>
                 </div>
@@ -79,7 +141,16 @@ const AssignmentDetails = () => {
                                     </p>
 
                                     <h3 className="mt-1 font-medium text-gray-900">
-                                        {assignment.startDate}
+
+                                        {
+                                            new Date(assignment?.startDate).toLocaleDateString("en-GB", {
+                                                day: "2-digit",
+                                                month: "short",
+                                                year: "numeric",
+                                            })
+                                        }
+
+
                                     </h3>
                                 </div>
                             </div>
@@ -95,7 +166,14 @@ const AssignmentDetails = () => {
                                     </p>
 
                                     <h3 className="mt-1 font-medium text-gray-900">
-                                        {assignment.submissionDate}
+                                        {
+                                            new Date(assignment?.submissionDate).toLocaleDateString("en-GB", {
+                                                day: "2-digit",
+                                                month: "short",
+                                                year: "numeric",
+                                            })
+                                        }
+
                                     </h3>
                                 </div>
                             </div>
@@ -120,7 +198,7 @@ const AssignmentDetails = () => {
                                     </p>
 
                                     <h3 className="mt-1 text-xl font-semibold text-gray-900">
-                                        {assignment.grade}
+                                        {assignment?.grade}
                                     </h3>
                                 </div>
                             </div>
@@ -132,7 +210,7 @@ const AssignmentDetails = () => {
 
                                 <div className="mt-3 rounded-2xl border border-gray-200 bg-gray-50 p-4">
                                     <p className="text-sm leading-7 text-gray-700">
-                                        {assignment.feedback}
+                                        {assignment?.feedback}
                                     </p>
                                 </div>
                             </div>
@@ -158,7 +236,7 @@ const AssignmentDetails = () => {
                         </div>
 
                         <a
-                            href={assignment.fileUrl}
+                            href={assignment?.fileUrl}
                             className="inline-flex items-center justify-center rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-900"
                         >
                             View File

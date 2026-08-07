@@ -12,7 +12,7 @@ const HomePage = () => {
     {
       title: "Trainer",
       description: "Manage classes, students, and learning materials.",
-      path: "http://localhost:5174",
+      path: "",
     },
     {
       title: "Admin",
@@ -36,23 +36,48 @@ const HomePage = () => {
 
         <div className="grid gap-6 md:grid-cols-3">
           {roles.map((role) => (
-            <button
-              key={role.title}
-              onClick={() => navigate(role.path)}
-              className="rounded-xl border border-gray-200 bg-white p-8 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
-            >
-              <h2 className="text-2xl font-semibold text-gray-900">
-                {role.title}
-              </h2>
 
-              <p className="mt-3 text-sm leading-6 text-gray-600">
-                {role.description}
-              </p>
+            <>
+              {
+                role.path == '' ?
+                  <>
+                    <a
+                      href="http://localhost:5173"
+                      className="rounded-xl border border-gray-200 bg-white p-8 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+                    >
+                      <h2 className="text-2xl font-semibold text-gray-900">
+                        {role.title}
+                      </h2>
 
-              <div className="mt-8 text-sm font-medium text-black">
-                Continue →
-              </div>
-            </button>
+                      <p className="mt-3 text-sm leading-6 text-gray-600">
+                        {role.description}
+                      </p>
+
+                      <div className="mt-8 text-sm font-medium text-black">
+                        Continue →
+                      </div>
+                    </a>
+                  </> :
+                  <button
+                    key={role.title}
+                    onClick={() => navigate(role.path)}
+                    className="rounded-xl border border-gray-200 bg-white p-8 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+                  >
+                    <h2 className="text-2xl font-semibold text-gray-900">
+                      {role.title}
+                    </h2>
+
+                    <p className="mt-3 text-sm leading-6 text-gray-600">
+                      {role.description}
+                    </p>
+
+                    <div className="mt-8 text-sm font-medium text-black">
+                      Continue →
+                    </div>
+                  </button>
+              }
+            </>
+
           ))}
         </div>
       </div>

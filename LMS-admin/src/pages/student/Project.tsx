@@ -6,30 +6,74 @@ import {
     Globe,
 } from "lucide-react";
 
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../stores/authStore";
+import { useEffect, useState } from "react";
+import { getStudentProjects } from "../../services";
+import Loading from "../../components/common/Loading";
 
-const projects = [
-    {
-        _id: "699441fa62c69f67bcfe2610",
+export interface Project {
+    _id: string;
+    projectName: string;
+    projectStatus: "pending" | "in-progress" | "complete";
+    startDate: string;
+    completedDate: string;
+    projectUrl: string | null;
+    githubUrl: string | null;
+    reviews: number;
+}
 
-        projectName: "Mthra",
 
-        projectStatus: "complete",
-
-        startDate: "2026-02-06",
-
-        completedDate: "2026-02-27",
-
-        projectUrl: null,
-
-        githubUrl: null,
-
-        reviews: 2,
-    },
-];
 
 const StudentProjects = () => {
     const navigate = useNavigate();
+
+
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+
+    let { user } = useAuthStore()
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+
+                const data = await getStudentProjects(user._id);
+
+                setProjects(data);
+                console.log("==>", data);
+
+            } catch (error) {
+                console.error("Failed to fetch student projects:", error);
+
+                setError("Failed to load projects.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (user?._id) {
+            fetchProjects();
+        }
+    }, [user?._id]);
+
+    if (loading) {
+        return (
+            <Loading />
+        )
+    }
+
+    if (!user) {
+        return (
+            <Navigate to={'/student/login'} />
+        )
+    }
+
+
 
     return (
         <div className="min-h-screen bg-gray-50 p-6">
@@ -73,7 +117,11 @@ const StudentProjects = () => {
                                             <CalendarDays size={15} />
 
                                             <span>
-                                                Started: {project.startDate}
+                                                Started: {new Date(project.startDate).toLocaleDateString("en-GB", {
+                                                    day: "2-digit",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                })}
                                             </span>
                                         </div>
                                     </div>
@@ -97,27 +145,7 @@ const StudentProjects = () => {
                                     {project.projectStatus}
                                 </div>
 
-                                {/* Reviews */}
-                                <div className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-xs font-medium text-gray-700">
-                                    {project.reviews} Reviews
-                                </div>
 
-                                {/* Links */}
-                                {project.githubUrl && (
-                                    <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-xs font-medium text-gray-700">
-                                        <Globe size={14} />
-
-                                        GitHub
-                                    </div>
-                                )}
-
-                                {project.projectUrl && (
-                                    <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-xs font-medium text-gray-700">
-                                        <Globe size={14} />
-
-                                        Live
-                                    </div>
-                                )}
                             </div>
                         </button>
                     ))}

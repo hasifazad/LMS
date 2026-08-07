@@ -1,9 +1,11 @@
 import { CalendarDays, ChevronRight, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../../services/axios";
+import { Navigate, useNavigate } from "react-router-dom";
+import api from "../../services/api";
 import { converToDate } from "../../utils/DateFormatConverter";
 import { useAuthStore } from "../../stores/authStore";
+import Loading from "../../components/common/Loading";
+import { getStudentAssignments } from "../../services";
 
 // const assignments = [
 //     {
@@ -30,25 +32,34 @@ const AssignmentsPage = () => {
 
     let [assignments, setAssignments] = useState([])
     useEffect(() => {
-
-        (async () => {
+        const fetchAssignments = async () => {
             try {
-                let response = await api.get(`/student/${user._id}/assignment`)
-                setAssignments(response.data.data)
-                console.log(response.data.data);
+                const data = await getStudentAssignments(user._id);
 
+                setAssignments(data);
+
+                console.log(data);
             } catch (error) {
-
+                console.error("Failed to fetch assignments:", error);
             }
-        })()
+        };
 
-    }, [])
+        fetchAssignments();
+    }, [user?._id]);
+
+    if (!user) {
+        return (
+            <Navigate to={'/student/login'} />
+        )
+    }
 
     if (assignments.length == 0) {
         return (
-            <h1>LOADING</h1>
+            <Loading />
         )
     }
+
+
 
     return (
         <div className="min-h-screen bg-gray-50 p-6">
@@ -56,7 +67,7 @@ const AssignmentsPage = () => {
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-semibold text-gray-900">
-                        Assignments {user._id}
+                        Assignments
                     </h1>
 
                     <p className="mt-2 text-sm text-gray-500">

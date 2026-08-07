@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
+import AddBatchButton from "../../components/admin/AddBatchButton";
+import { getBatches } from "../../services/batch.service";
 
 /* -------------------------------------------------------------------------- */
 /*                                   TYPES                                    */
@@ -90,16 +92,11 @@ const StudentBatches = () => {
             try {
                 setLoading(true);
 
-                const response = await fetch(
-                    "http://localhost:3000/api/v1/batch"
-                );
+                const batches = await getBatches();
 
-                const data: BatchResponse =
-                    await response.json();
-
-                setBatches(data.data);
+                setBatches(batches);
             } catch (error) {
-                console.log(error);
+                console.error("Failed to fetch batches:", error);
             } finally {
                 setLoading(false);
             }
@@ -167,7 +164,7 @@ const StudentBatches = () => {
                 <button
                     onClick={() =>
                         navigate(
-                            `/admin/batches/${row.original._id}`
+                            `/admin/batch/${row.original._id}`
                         )
                     }
                     className="group flex items-center gap-3"
@@ -272,15 +269,7 @@ const StudentBatches = () => {
     /*                                 LOADING                                */
     /* ---------------------------------------------------------------------- */
 
-    if (loading) {
-        return (
-            <div className="flex min-h-screen items-center justify-center bg-gray-50">
-                <p className="text-sm text-gray-500">
-                    Loading batches...
-                </p>
-            </div>
-        );
-    }
+
 
     /* ---------------------------------------------------------------------- */
     /*                                 RETURN                                 */
@@ -288,31 +277,20 @@ const StudentBatches = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 p-6">
-            <div className="flex justify-end">
-                <button
-                    onClick={() =>
-                        navigate("/admin/batches/add")
-                    }
-                    className="group inline-flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-5 py-3 text-sm font-medium text-gray-800 transition-all duration-200 hover:border-black hover:bg-black hover:text-white"
-                >
-                    <Plus
-                        size={16}
-                        className="transition-transform duration-200 group-hover:rotate-90"
-                    />
 
-                    <span>Create Batch</span>
-                </button>
-            </div>
             <div className="mx-auto max-w-7xl space-y-6">
                 {/* Header */}
-                <div>
-                    <h1 className="text-3xl font-semibold text-gray-900">
-                        Batches
-                    </h1>
+                <div className="flex justify-between">
+                    <div>
+                        <h1 className="text-3xl font-semibold text-gray-900">
+                            Batches
+                        </h1>
 
-                    <p className="mt-2 text-sm text-gray-500">
-                        View and explore all available batches.
-                    </p>
+                        <p className="mt-2 text-sm text-gray-500">
+                            View and explore all available batches.
+                        </p>
+                    </div>
+                    <AddBatchButton />
                 </div>
 
                 {/* Filters */}
@@ -387,24 +365,47 @@ const StudentBatches = () => {
                         </thead>
 
                         <tbody>
-                            {table.getRowModel().rows.map((row) => (
-                                <tr
-                                    key={row.id}
-                                    className="border-t border-gray-100"
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <td
-                                            key={cell.id}
-                                            className="px-6 py-5 text-sm text-gray-600"
+                            {loading ?
+
+                                (
+                                    Array.from({ length: 5 }).map((_, index) => (
+                                        <tr
+                                            key={index}
+                                            className="border-t border-gray-100"
                                         >
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))}
+                                            {table.getAllColumns().map((column) => (
+                                                <td
+                                                    key={column.id}
+                                                    className="px-6 py-5"
+                                                >
+                                                    <div className="h-4 w-full animate-pulse rounded bg-gray-200" />
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))
+                                )
+
+
+                                : (
+                                    table.getRowModel().rows.map((row) => (
+                                        <tr
+                                            key={row.id}
+                                            className="border-t border-gray-100"
+                                        >
+                                            {row.getVisibleCells().map((cell) => (
+                                                <td
+                                                    key={cell.id}
+                                                    className="px-6 py-5 text-sm text-gray-600"
+                                                >
+                                                    {flexRender(
+                                                        cell.column.columnDef.cell,
+                                                        cell.getContext()
+                                                    )}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))
+                                )}
                         </tbody>
                     </table>
 

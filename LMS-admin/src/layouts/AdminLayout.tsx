@@ -19,24 +19,24 @@ const sidebarItems = [
         path: "/admin",
     },
     {
-        title: "Students",
+        title: "Student",
         icon: Users,
-        path: "/admin/students",
+        path: "/admin/student",
     },
     {
-        title: "Trainers",
+        title: "Trainer",
         icon: GraduationCap,
-        path: "/admin/trainers",
+        path: "/admin/trainer",
     },
     {
-        title: "Courses",
+        title: "Course",
         icon: BookOpen,
-        path: "/admin/courses",
+        path: "/admin/course",
     },
     {
-        title: "Batches",
+        title: "Batch",
         icon: BookOpen,
-        path: "/admin/batches",
+        path: "/admin/batch",
     },
 ];
 
@@ -58,8 +58,9 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                                 <NavLink
                                     key={item.path}
                                     to={item.path}
+                                    end={item.path === "/admin"}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200
+                                        `flex items-center gap-3 px-4 py-3 rounded-2xl
                     ${isActive
                                             ? "bg-gray-900 text-white"
                                             : "text-gray-600 hover:bg-gray-100"

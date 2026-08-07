@@ -7,12 +7,15 @@ import HomePage from "../pages/admin/Dashboard";
 import StudentLayout from "../layouts/StudentLayout";
 import ProtectedRoute from "./ProtectedRoutes";
 import StudentDashboard from "../pages/student/Dashboard";
-import AssignmentsPage from "../pages/student/AssignmentsPage";
-import AssignmentDetails from "../pages/student/AssignmentDetails";
-import Certificate from "../pages/student/CertificatePage";
-import StudentAttendance from "../pages/student/StudentsAttendance";
-import StudentProjects from "../pages/student/StudentProjects";
-import StudentLoginPage from "../pages/student/StudentLoginPage";
+import AssignmentsPage from "../pages/student/Assignment";
+import AssignmentDetails from "../pages/student/AssignmentDetail";
+import Certificate from "../pages/student/Certificate";
+import StudentAttendance from "../pages/student/Attendance";
+import StudentProjects from "../pages/student/Project";
+import StudentLoginPage from "../pages/student/Login";
+import ProjectDetails from "../pages/student/ProjectDetail";
+import StudentSettings from "../pages/student/Settings";
+import UpdateStudent from "../components/student/UpdateStudent";
 
 const StudentRoutes = () => {
     return (
@@ -29,6 +32,9 @@ const StudentRoutes = () => {
                     <Route path="/certificate" element={<Certificate />} />
                     <Route path="/attendance" element={<StudentAttendance />} />
                     <Route path="/projects" element={<StudentProjects />} />
+                    <Route path="/projects/:id" element={<ProjectDetails />} />
+                    <Route path="/setting" element={<StudentSettings />} />
+                    <Route path="/edit/:id" element={<UpdateStudent />} />
                 </Routes>
             </StudentLayout>
         </ProtectedRoute>
