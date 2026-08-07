@@ -6,18 +6,18 @@ import * as Yup from "yup";
 import { createNewStudent } from "../../services/student.service";
 
 interface CreateStudentValues {
-    firstName: string;
-    lastName: string;
-    email: string;
-    mobileNumber: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    mobileNumber?: string;
 }
 
 interface StudentResponse {
-    studentId: string;
-    password: string;
+    studentId?: string;
+    password?: string;
 }
 
-const validationSchema = Yup.object({
+const validationSchema = Yup.object<CreateStudentValues>({
     firstName: Yup.string()
         .trim()
         .required("First name is required"),

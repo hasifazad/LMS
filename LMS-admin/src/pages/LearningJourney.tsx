@@ -102,13 +102,13 @@ export default function LearningJourney() {
                 stars={3}
                 base={blue}
             />
-            <JourneyNode
+            {/* <JourneyNode
                 title="HTML"
                 icon={Code2}
                 status="completed"
                 stars={3}
                 base={green}
-            />
+            /> */}
 
 
         </>

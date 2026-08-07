@@ -42,15 +42,15 @@ type Student = {
 };
 
 type FormValues = {
-    batchName: string;
-    startDate: string;
-    endDate: string;
-    startTime: string;
-    endTime: string;
-    mentor: string;
-    course: string;
-    day: string[];
-    students: string[];
+    batchName?: string;
+    startDate?: string;
+    endDate?: string;
+    startTime?: string;
+    endTime?: string;
+    mentor?: string;
+    course?: string;
+    day?: string[];
+    students?: string[];
 };
 
 /* -------------------------------------------------------------------------- */
@@ -159,7 +159,7 @@ const defaultValues: FormValues = {
     course: "",
     day: [],
     students: [],
-};
+  };
 
 /* -------------------------------------------------------------------------- */
 /*                              SMALL COMPONENTS                              */
