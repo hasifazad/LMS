@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
+import api from "../../services/api";
 
 interface LoginResponse {
     success: boolean;
@@ -42,8 +43,8 @@ const StudentLoginPage = () => {
         try {
             setLoading(true);
 
-            const response = await axios.post<any>(
-                "http://localhost:3000/api/v1/student/login-password",
+            const response = await api.post<any>(
+                `/student/login-password`,
                 {
                     email,
                     password,
