@@ -5394,3 +5394,5 @@
 ::1 - - [05/Aug/2026:11:15:15 +0000] "GET /api/v1/student/68f4ac7a1224e6533c1557f0 HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
 ::1 - - [05/Aug/2026:11:15:25 +0000] "GET /api/v1/student/68f4ac7a1224e6533c1557f0 HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
 ::1 - - [05/Aug/2026:11:17:31 +0000] "GET /api/v1/student/68f4ac7a1224e6533c1557f0 HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
+127.0.0.1 - - [08/Aug/2026:11:11:56 +0000] "GET /test HTTP/1.1" 200 17 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
+127.0.0.1 - - [08/Aug/2026:11:11:57 +0000] "GET /favicon.ico HTTP/1.1" 404 150 "http://localhost:3000/test" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"

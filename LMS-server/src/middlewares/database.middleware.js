@@ -26,7 +26,8 @@ async function databaseMiddleware(req, res, next) {
 
         // Get the database config for the organization
         // const dbConfig = await getDbConfig(orgCode);
-        const dbConfig = 'mongodb+srv://asifazad114:HHzs9blZd4gsNCqR@cluster0.ugptnol.mongodb.net/org1db'
+        // 'mongodb+srv://asifazad114:HHzs9blZd4gsNCqR@cluster0.ugptnol.mongodb.net/org1db'
+        const dbConfig = process.env.MONGO_URI
 
 
         // Create a new connection
