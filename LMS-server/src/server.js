@@ -82,6 +82,12 @@ app.use('/api/v1/student', studentRoutes);
 app.use('/api/v1/batch', batchRoutes);
 app.use('/api/v1/course', courseRoutes);
 
+app.get('/test', (req, res) => {
+
+    res.send('hello from server')
+
+})
+
 
 // Replace with your MongoDB connection string (local or MongoDB Atlas)
 // const uri = 'mongodb://localhost:27017/org1db'; // For local
@@ -120,7 +126,7 @@ app.use((err, req, res, next) => {
 
 //  Start Server
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
 
