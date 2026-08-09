@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export let fetchData: any = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL,
+    baseURL: `${import.meta.env.VITE_BASE_URL}/api/v1`,
     headers: {
         "x-organization-id": "org1db"
     }
