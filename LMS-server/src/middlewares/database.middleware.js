@@ -33,6 +33,9 @@ async function databaseMiddleware(req, res, next) {
         // Create a new connection
         const dbConnection = await mongoose.createConnection(dbConfig);
 
+        console.log('database connected');
+        
+
         // Cache the connection
         connections[orgCode] = dbConnection;
 

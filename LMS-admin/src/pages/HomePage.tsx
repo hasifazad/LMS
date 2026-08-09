@@ -12,7 +12,7 @@ const HomePage = () => {
     {
       title: "Trainer",
       description: "Manage classes, students, and learning materials.",
-      path: "",
+      path: ,
     },
     {
       title: "Admin",
@@ -42,7 +42,7 @@ const HomePage = () => {
                 role.path == '' ?
                   <>
                     <a
-                      href="http://localhost:5173"
+                      href={import.meta.env.VITE_STUDENT_URL}
                       className="rounded-xl border border-gray-200 bg-white p-8 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
                     >
                       <h2 className="text-2xl font-semibold text-gray-900">
