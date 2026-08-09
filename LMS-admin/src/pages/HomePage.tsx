@@ -12,7 +12,7 @@ const HomePage = () => {
     {
       title: "Trainer",
       description: "Manage classes, students, and learning materials.",
-      path: ,
+      path: "",
     },
     {
       title: "Admin",
