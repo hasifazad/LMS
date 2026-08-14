@@ -33,7 +33,7 @@ import { useParams } from "react-router-dom";
 
 
 interface MentorDetailsProps {
-    mentorId: string;
+    mentorId?: string;
 }
 
 const TrainerDetail = ({

@@ -11,7 +11,7 @@ import { Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 type Mentor = {
-    id: number;
+    _id: number;
     role: string;
     firstName: string;
     lastName: string;
@@ -54,7 +54,7 @@ export default function TrainersList() {
                             type="button"
                             onClick={() =>
                                 navigate(
-                                    `/admin/trainer/${mentor._id}`
+                                    `/admin/trainer/${mentor?._id}`
                                 )
                             }
                             className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
