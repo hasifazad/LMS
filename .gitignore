@@ -2,6 +2,7 @@
 **/.env
 **/build
 **/logs
+**/dist
 
 
 
