@@ -1,109 +1,172 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import {
     Users,
-    GraduationCap,
+    UserRoundCheck,
+    Layers,
     BookOpen,
-    ClipboardList,
-    ChevronRight,
+    UserPlus,
 } from "lucide-react";
+import { getAdminDashboard } from "../../services/admin.service";
 
-const navigationCards = [
-    {
-        title: "Students",
-        description: "Manage student profiles, attendance, progress, and records.",
-        icon: Users,
-        href: "/admin/students",
-    },
-    {
-        title: "Trainers",
-        description: "View trainer details, schedules, and assigned batches.",
-        icon: GraduationCap,
-        href: "/admin/trainers",
-    },
-    {
-        title: "Courses",
-        description: "Explore available courses and learning programs.",
-        icon: BookOpen,
-        href: "/admin/courses",
-    },
-    {
-        title: "Reports",
-        description: "Track performance, analytics, and activity reports.",
-        icon: ClipboardList,
-        href: "/admin/reports",
-    },
-];
 
-export default function HomePage() {
+
+interface DashboardData {
+    totalStudents: number;
+    totalTrainers: number;
+    totalBatches: number;
+    totalCourses: number;
+    lastMonthAdmissions: number;
+}
+
+const AdminDashboard = () => {
+    const [dashboard, setDashboard] = useState<DashboardData | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchDashboard = async () => {
+            try {
+                setLoading(true);
+
+                const data = await getAdminDashboard();
+
+                setDashboard(data);
+            } catch (error) {
+                console.error("Failed to fetch dashboard data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDashboard();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex min-h-[70vh] items-center justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-200 border-t-gray-900" />
+            </div>
+        );
+    }
+
+    if (!dashboard) {
+        return (
+            <div className="flex min-h-[70vh] items-center justify-center">
+                <p className="text-sm text-gray-500">
+                    Failed to load dashboard data.
+                </p>
+            </div>
+        );
+    }
+
+    const stats = [
+        {
+            title: "Total Students",
+            value: dashboard.totalStudents,
+            icon: Users,
+        },
+        {
+            title: "Total Trainers",
+            value: dashboard.totalTrainers,
+            icon: UserRoundCheck,
+        },
+        {
+            title: "Total Batches",
+            value: dashboard.totalBatches,
+            icon: Layers,
+        },
+        {
+            title: "Total Courses",
+            value: dashboard.totalCourses,
+            icon: BookOpen,
+        },
+    ];
+
     return (
-        <div className="min-h-screen bg-[#fafafa] text-gray-800">
-            {/* Navbar */}
-            {/* <header className="border-b border-gray-200 bg-white/80 backdrop-blur">
-                <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-                    <div>
-                        <h1 className="text-xl font-semibold tracking-tight">
-                            Learning Portal
-                        </h1>
-                        <p className="text-sm text-gray-500">
-                            Simple management dashboard
-                        </p>
-                    </div>
+        <div className="min-h-screen bg-gray-50 p-6">
+            <div className="mx-auto max-w-7xl">
 
-                    <button className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium transition hover:bg-gray-50">
-                        Profile
-                    </button>
-                </div>
-            </header> */}
+                {/* Header */}
+                <div className="mb-8">
+                    <h1 className="text-2xl font-semibold text-gray-900">
+                        Admin Dashboard
+                    </h1>
 
-            {/* Hero Section */}
-            <section className="mx-auto max-w-7xl px-6">
-                <div className="max-w-3xl">
-                    {/* <span className="rounded-full border border-gray-200 bg-white px-4 py-1 text-sm text-gray-600 shadow-sm">
-                        Dashboard
-                    </span> */}
-
-                    <h2 className="text-4xl font-bold leading-tight tracking-tight md:text-5xl">
-                        Manage your institution with clarity and simplicity.
-                    </h2>
-
-                    <p className="mt-5 text-lg leading-relaxed text-gray-500">
-                        Access students, trainers, reports, and course management from one
-                        clean and organized workspace.
+                    <p className="mt-1 text-sm text-gray-500">
+                        Overview of your LMS
                     </p>
                 </div>
 
-                {/* Navigation Cards */}
-                <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    {navigationCards.map((card) => {
-                        const Icon = card.icon;
+                {/* Stats */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    {stats.map((stat) => {
+                        const Icon = stat.icon;
 
                         return (
-                            <a
-                                key={card.title}
-                                href={card.href}
-                                className="group rounded-3xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                            <div
+                                key={stat.title}
+                                className="rounded-xl border border-gray-200 bg-white p-5"
                             >
-                                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100">
-                                    <Icon className="h-7 w-7 text-gray-700" />
-                                </div>
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-sm text-gray-500">
+                                            {stat.title}
+                                        </p>
 
-                                <div className="mt-6">
-                                    <h3 className="text-lg font-semibold">{card.title}</h3>
+                                        <p className="mt-2 text-2xl font-semibold text-gray-900">
+                                            {stat?.value?.toLocaleString() || 0}
+                                        </p>
+                                    </div>
 
-                                    <p className="mt-2 text-sm leading-relaxed text-gray-500">
-                                        {card.description}
-                                    </p>
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100">
+                                        <Icon
+                                            size={20}
+                                            className="text-gray-600"
+                                        />
+                                    </div>
                                 </div>
-
-                                <div className="mt-6 flex items-center text-sm font-medium text-gray-700">
-                                    Open
-                                    <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                </div>
-                            </a>
+                            </div>
                         );
                     })}
                 </div>
-            </section>
+
+                {/* Last Month Admissions */}
+                <div className="mt-6">
+                    <div className="rounded-xl border border-gray-200 bg-white p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">
+                                    Last Month Admissions
+                                </p>
+
+                                <div className="mt-3 flex items-center gap-3">
+                                    <p className="text-3xl font-semibold text-gray-900">
+                                        {dashboard.lastMonthAdmissions}
+                                    </p>
+
+                                    <span className="text-sm text-gray-500">
+                                        new students
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100">
+                                <UserPlus
+                                    size={22}
+                                    className="text-gray-700"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mt-5 border-t border-gray-100 pt-4">
+                            <p className="text-xs text-gray-400">
+                                Admissions recorded during the previous month
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
-}
+};
+
+export default AdminDashboard;

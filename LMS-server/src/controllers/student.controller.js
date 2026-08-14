@@ -44,7 +44,7 @@ module.exports = {
 
         console.log(req.body);
 
-        let { firstName, lastName, email, mobileNumber } = req.body
+        let { firstName, lastName, email, mobileNumber, joiningDate, courseId } = req.body
 
         try {
             let studentExist = await Student(req.db).findOne({ email })
@@ -59,7 +59,7 @@ module.exports = {
 
             let password = generateRandomPassword();   // generats a random password
             const hashedPassword = await argon2.hash(password);   //hash the password
-
+            
             const studentCount = await Student(req.db).find().count()
 
             console.log(studentCount);
@@ -67,13 +67,22 @@ module.exports = {
 
             const enrollmentNumber = "STU" + studentCount;
 
-            await Student(req.db).create({
+            let stud = await Student(req.db).create({
                 firstName,
                 lastName,
                 email,
                 password: hashedPassword,
                 mobileNumber,
-                enrollmentNumber
+                enrollmentNumber,
+                courseId
+            })
+
+            
+            console.log(joiningDate);
+
+            await StudentCourse(req.db).create({
+                studentId: stud._id,
+                startDate: joiningDate
             })
 
             console.log(password);

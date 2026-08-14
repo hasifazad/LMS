@@ -14,8 +14,8 @@ const validationSchema = Yup.object({
 });
 
 const initialValues = {
-  email: "",
-  password: "",
+  email: "admin@gmail.com",
+  password: "admin123",
 };
 
 const AdminLoginPage = () => {
@@ -35,6 +35,7 @@ const AdminLoginPage = () => {
     ) {
       alert("Login Successful");
 
+      localStorage.setItem('admin', JSON.stringify({ email: initialValues.email }))
       navigate("/admin/dashboard")
     } else {
       alert("Invalid Credentials");

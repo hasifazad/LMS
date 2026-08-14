@@ -71,7 +71,7 @@ module.exports = {
             console.log(result);
 
 
-            res.status(200).json({ message: 'students created successfully', data: '' })
+            res.status(200).json({ message: 'trainer details', data: result })
 
         } catch (error) {
             console.log(error);

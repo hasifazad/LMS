@@ -13,6 +13,7 @@ import BatchDetails from "../pages/admin/BatchDetail";
 import CreateBatch from "../pages/admin/BatchAdd";
 import LearningJourney from "../pages/LearningJourney";
 import PageNotFound from "../components/common/PageNotFound";
+import TrainerDetail from "../pages/admin/TrainerDetail";
 
 // import ProtectedRoute from "./ProtectedRoute";
 
@@ -32,16 +33,17 @@ const AdminRoutes = () => {
         <ProtectedRoute allowedRoles={["admin"]}>
             <AdminLayout>
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
+                    <Route path="/dashboard" element={<HomePage />} />
 
                     {/* Students */}
-                    <Route path="student/create" element={<CreateStudentForm />} />
+                    <Route path="/student/create" element={<CreateStudentForm />} />
 
                     <Route path="/student" element={<StudentsList />} />
                     <Route path="/student/update/:id" element={<UpdateStudent />} />
 
                     {/* Trainers */}
                     <Route path="trainer" element={<TrainersList />} />
+                    <Route path="trainer/:id" element={<TrainerDetail />} />
 
                     {/* Courses */}
                     <Route path="/course" element={<CourseList />} />

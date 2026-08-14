@@ -5,6 +5,8 @@ import {
     FileText,
     TrendingUp,
 } from "lucide-react";
+import { useAuthStore } from "../../stores/authStore";
+import { Navigate } from "react-router-dom";
 
 const stats = [
     {
@@ -57,11 +59,27 @@ const recentActivities = [
     "Attendance updated for this week",
 ];
 
+
+
+
 const StudentDashboard = () => {
+
+
+
+    let { user } = useAuthStore()
+
+    if (!user) {
+        return (
+            <Navigate to={'/student/login'} />
+        )
+    }
+
+
+
     return (
         <div className="min-h-screen bg-gray-50 p-6">
             <div className="mx-auto max-w-7xl space-y-6">
-               
+
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -105,7 +123,7 @@ const StudentDashboard = () => {
                                         Course Progress
                                     </h2>
 
-                            
+
                                 </div>
 
                                 <div className="rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700">
@@ -198,10 +216,10 @@ const StudentDashboard = () => {
 
                                             <div
                                                 className={`rounded-xl px-3 py-1 text-xs font-medium ${assignment.status === "Pending"
-                                                        ? "bg-black text-white"
-                                                        : assignment.status === "Submitted"
-                                                            ? "bg-gray-200 text-gray-700"
-                                                            : "bg-gray-100 text-gray-700"
+                                                    ? "bg-black text-white"
+                                                    : assignment.status === "Submitted"
+                                                        ? "bg-gray-200 text-gray-700"
+                                                        : "bg-gray-100 text-gray-700"
                                                     }`}
                                             >
                                                 {assignment.status}

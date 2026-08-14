@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
     LayoutDashboard,
     BookOpen,
@@ -12,6 +12,7 @@ import {
     Award,
     MessageSquare,
     Settings,
+    LogOut,
 } from "lucide-react";
 import { useAuthStore } from "../stores/authStore";
 
@@ -71,39 +72,55 @@ const StudentLayout = ({
     children,
 }: StudentLayoutProps) => {
     const { user, logout } = useAuthStore();
+
+    let navigate = useNavigate()
     return (
         <div className="min-h-screen bg-[#f8fafc] flex">
             {/* Sidebar */}
-            <aside className="w-72 bg-white border-r border-gray-200 px-6 py-8 hidden md:flex flex-col">
-                <h1 className="text-2xl font-semibold text-gray-900 mb-10">
-                    Student Portal
-                </h1>
+            <aside className="w-72 h-screen bg-white border-r border-gray-200 px-6 py-8 hidden md:flex flex-col justify-between sticky left-0 top-0">
+                <div>
+                    <h1 className="text-2xl font-semibold text-gray-900 mb-10">
+                        Student Portal
+                    </h1>
 
-                <nav className="space-y-2">
-                    {sidebarItems.map((item) => {
-                        const Icon = item.icon;
+                    <nav className="space-y-2">
+                        {sidebarItems.map((item) => {
+                            const Icon = item.icon;
 
-                        return (
-                            <NavLink
-                                key={item.path}
-                                to={item.path}
-                                end={item.path === '/student'}
-                                className={({ isActive }) =>
-                                    `flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200
+                            return (
+                                <NavLink
+                                    key={item.path}
+                                    to={item.path}
+                                    end={item.path === '/student'}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200
                   ${isActive
-                                        ? "bg-gray-900 text-white"
-                                        : "text-gray-600 hover:bg-gray-100"
-                                    }`
-                                }
-                            >
-                                <Icon size={20} />
-                                <span className="text-sm font-medium">
-                                    {item.name}
-                                </span>
-                            </NavLink>
-                        );
-                    })}
-                </nav>
+                                            ? "bg-gray-900 text-white"
+                                            : "text-gray-600 hover:bg-gray-100"
+                                        }`
+                                    }
+                                >
+                                    <Icon size={20} />
+                                    <span className="text-sm font-medium">
+                                        {item.name}
+                                    </span>
+                                </NavLink>
+                            );
+                        })}
+                    </nav>
+                </div>
+
+                <button className="flex items-center gap-3 text-red-500 hover:bg-red-50 px-4 py-3 rounded-2xl transition-all"
+                    onClick={() => {
+                        localStorage.removeItem('user')
+                        navigate('/')
+                    }}
+                >
+                    <LogOut size={20} />
+                    <span className="text-sm font-medium">
+                        Logout
+                    </span>
+                </button>
             </aside>
 
             {/* Main */}
@@ -119,7 +136,7 @@ const StudentLayout = ({
                 </header> */}
 
                 {/* Header */}
-                <div className="flex flex-col justify-between gap-4 border border-gray-200 bg-white p-2 lg:flex-row lg:items-center px-10 py-5">
+                <div className="flex flex-col justify-between gap-4 border border-gray-200 bg-white p-2 lg:flex-row lg:items-center px-10 py-5 sticky left-0 top-0">
                     <div>
                         <h1 className="text-3xl font-semibold text-gray-900">
                             Welcome Back, {user?.firstName}👋

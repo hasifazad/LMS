@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 import { createNewStudent } from "../../services/student.service";
+import { getCourses } from "../../services/course.service";
 
 interface CreateStudentValues {
     firstName?: string;
     lastName?: string;
     email?: string;
     mobileNumber?: string;
+    joiningDate?: string;
+    courseId?: string;
+}
+
+interface Course {
+    _id: string;
+    courseName: string;
+    courseCode: string
 }
 
 interface StudentResponse {
@@ -37,6 +46,12 @@ const validationSchema = Yup.object<CreateStudentValues>({
             "Mobile number must be exactly 10 digits"
         )
         .required("Mobile number is required"),
+
+    joiningDate: Yup.string()
+        .required("Joining date is required"),
+
+    courseId: Yup.string()
+        .required("Course is required"),
 });
 
 const inputClass =
@@ -54,6 +69,9 @@ const StudentAdd = () => {
 
     const [showModal, setShowModal] = useState(false);
 
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [loadingCourses, setLoadingCourses] = useState(false);
+
     const {
         register,
         handleSubmit,
@@ -69,10 +87,17 @@ const StudentAdd = () => {
             lastName: "",
             email: "",
             mobileNumber: "",
+            joiningDate: "",
+            courseId: "",
         },
     });
 
     const onSubmit = async (values: CreateStudentValues) => {
+
+        console.log('helloo');
+        
+        console.log(values);
+        
         try {
             const data = await createNewStudent(values);
 
@@ -90,6 +115,29 @@ const StudentAdd = () => {
             console.error("Failed to create student:", error);
         }
     };
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                setLoadingCourses(true);
+
+                const data = await getCourses();
+
+                console.log(data);
+
+
+                if (data.data) {
+                    setCourses(data.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch courses:", error);
+            } finally {
+                setLoadingCourses(false);
+            }
+        };
+
+        fetchCourses();
+    }, []);
 
     return (
         <>
@@ -193,7 +241,59 @@ const StudentAdd = () => {
                                 </p>
                             )}
                         </div>
+
+                        {/* Joining Date */}
+                        <div>
+                            <label className={labelClass}>
+                                Joining Date
+                            </label>
+
+                            <input
+                                type="date"
+                                className={inputClass}
+                                {...register("joiningDate")}
+                            />
+
+                            {errors.joiningDate && (
+                                <p className={errorClass}>
+                                    {errors.joiningDate.message}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Course */}
+                        <div>
+                            <label className={labelClass}>
+                                Course
+                            </label>
+
+                            <select
+                                className={inputClass}
+                                {...register("courseId")}
+                                disabled={loadingCourses}
+                            >
+                                <option value="">
+                                    {loadingCourses
+                                        ? "Loading courses..."
+                                        : "Select a course"}
+                                </option>
+
+                                {courses.map((course) => (
+                                    <option key={course._id} value={course._id}>
+                                        {course?.courseName}
+                                    </option>
+                                ))}
+                            </select>
+
+                            {errors.courseId && (
+                                <p className={errorClass}>
+                                    {errors.courseId.message}
+                                </p>
+                            )}
+                        </div>
                     </div>
+
+
 
                     {/* Submit */}
                     <div className="flex justify-end pt-4">

@@ -86,7 +86,8 @@ const studentCourseSchema = new mongoose.Schema({
     modeOfClass: { type: String, enum: ['online', 'offline'], default: 'offline' },
     startDate: { type: Date, default: null },
     endDate: { type: Date, default: null },
-    modules: { type: [moduleSchema], default: [] }
+    modules: { type: [moduleSchema], default: [] },
+    isCourseCompleted: { type: Boolean, default: false }
 }, { timestamps: true });
 
 

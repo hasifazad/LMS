@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
     LayoutDashboard,
     Users,
@@ -16,7 +16,7 @@ const sidebarItems = [
     {
         title: "Dashboard",
         icon: LayoutDashboard,
-        path: "/admin",
+        path: "/admin/dashboard",
     },
     {
         title: "Student",
@@ -41,10 +41,13 @@ const sidebarItems = [
 ];
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
+
+    let navigate = useNavigate()
+
     return (
         <div className="min-h-screen bg-[#f8fafc] flex">
             {/* Sidebar */}
-            <aside className="w-72 bg-white border-r border-gray-200 px-6 py-8 hidden md:flex flex-col justify-between">
+            <aside className="w-72 h-screen bg-white border-r border-gray-200 px-6 py-8 hidden md:flex flex-col justify-between sticky left-0 top-0">
                 <div>
                     <h1 className="text-2xl font-semibold text-gray-900 mb-10">
                         LMS Admin
@@ -77,7 +80,12 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                     </nav>
                 </div>
 
-                <button className="flex items-center gap-3 text-red-500 hover:bg-red-50 px-4 py-3 rounded-2xl transition-all">
+                <button className="flex items-center gap-3 text-red-500 hover:bg-red-50 px-4 py-3 rounded-2xl transition-all"
+                    onClick={() => {
+                        localStorage.removeItem('admin')
+                        navigate('/admin/login')
+                    }}
+                >
                     <LogOut size={20} />
                     <span className="text-sm font-medium">
                         Logout
@@ -88,7 +96,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
             {/* Main */}
             <div className="flex-1 flex flex-col">
                 {/* Topbar */}
-                <header className="h-20 bg-white border-b border-gray-200 px-8 flex items-center justify-between">
+                <header className="h-20 bg-white border-b border-gray-200 px-8 flex items-center justify-between sticky left-0 top-0">
                     <div>
                         <h2 className="text-xl font-semibold text-gray-900">
                             Welcome Back 👋

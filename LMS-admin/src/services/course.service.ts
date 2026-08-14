@@ -5,6 +5,13 @@ export const getAllCourses = async () => {
   return response.data;
 };
 
+
+export const getCourses = async () => {
+    const response = await api.get("/course/list");
+
+    return response.data;
+};
+
 // export const getUserById = async (id: string) => {
 //   const response = await api.get(`/users/${id}`);
 //   return response.data;
