@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Plus } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
     flexRender,
@@ -51,19 +51,21 @@ export default function StudentsList() {
 
                     return (
                         <span
-                            className={`
-                                inline-flex
-                                rounded-full
-                                px-2.5
-                                py-1
-                                text-xs
-                                font-medium
-                                ${status === "Active"
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-red-100 text-red-700"
+                            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border
+                                 ${status === "active"
+                                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                    : "bg-rose-50 text-rose-700 border-rose-200"
                                 }
-                            `}
+                                `}
                         >
+                            <span
+                                className={`h-1.5 w-1.5 rounded-full ${status === "active"
+                                    ? "bg-emerald-500"
+                                    : "bg-rose-500"
+                                    }
+                                    `}
+                            />
+
                             {status}
                         </span>
                     );
@@ -76,23 +78,11 @@ export default function StudentsList() {
                     <button
                         type="button"
                         onClick={() =>
-                            navigate(
-                                `/admin/student/update/${row.original._id}`
-                            )
+                            navigate(`/admin/student/update/${row.original._id}`)
                         }
-                        className="
-                            cursor-pointer
-                            rounded-md
-                            bg-green-300
-                            px-3
-                            py-1.5
-                            text-xs
-                            font-medium
-                            text-green-900
-                            transition-colors
-                            hover:bg-green-400
-                        "
+                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-mediumtext-slate-600 shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 active:scale-95"
                     >
+                        <Pencil size={13} strokeWidth={2} />
                         Edit
                     </button>
                 ),

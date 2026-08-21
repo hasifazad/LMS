@@ -18,6 +18,7 @@ import {
     AlertCircle,
     CheckCircle2,
 } from "lucide-react";
+import { getFormData } from "../../services/batch.service";
 
 /* -------------------------------------------------------------------------- */
 /*                                   TYPES                                    */
@@ -159,7 +160,7 @@ const defaultValues: FormValues = {
     course: "",
     day: [],
     students: [],
-  };
+};
 
 /* -------------------------------------------------------------------------- */
 /*                              SMALL COMPONENTS                              */
@@ -261,47 +262,18 @@ const CreateBatch = () => {
             try {
                 setDataLoading(true);
 
-                const [
-                    courseResponse,
-                    mentorResponse,
-                    studentResponse,
-                ] = await Promise.all([
-                    fetch(
-                        "http://localhost:3000/api/v1/course/list"
-                    ),
-                    fetch(
-                        "http://localhost:3000/api/v1/staff/mentor/list"
-                    ),
-                    fetch(
-                        "http://localhost:3000/api/v1/student"
-                    ),
-                ]);
+                const {
+                    courses,
+                    mentors,
+                    students,
+                } = await getFormData();
 
-                if (
-                    !courseResponse.ok ||
-                    !mentorResponse.ok ||
-                    !studentResponse.ok
-                ) {
-                    throw new Error(
-                        "Failed to fetch form data"
-                    );
-                }
-
-                const courseData =
-                    await courseResponse.json();
-
-                const mentorData =
-                    await mentorResponse.json();
-
-                const studentData =
-                    await studentResponse.json();
-
-                setCourses(courseData.data ?? []);
-                setMentors(mentorData.data ?? []);
-                setStudents(studentData.data ?? []);
+                setCourses(courses);
+                setMentors(mentors);
+                setStudents(students);
             } catch (error) {
                 console.error(
-                    "Failed to load batch data:",
+                    "Failed to load form data:",
                     error
                 );
 
@@ -632,8 +604,8 @@ const CreateBatch = () => {
                                         "batchName"
                                     )}
                                     className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:ring-2 ${errors.batchName
-                                            ? "border-red-300 focus:border-red-400 focus:ring-red-100"
-                                            : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
+                                        ? "border-red-300 focus:border-red-400 focus:ring-red-100"
+                                        : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
                                         }`}
                                 />
 
@@ -682,8 +654,8 @@ const CreateBatch = () => {
                                             "startDate"
                                         )}
                                         className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:ring-2 ${errors.startDate
-                                                ? "border-red-300 focus:border-red-400 focus:ring-red-100"
-                                                : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
+                                            ? "border-red-300 focus:border-red-400 focus:ring-red-100"
+                                            : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
                                             }`}
                                     />
 
@@ -715,8 +687,8 @@ const CreateBatch = () => {
                                             "endDate"
                                         )}
                                         className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:ring-2 ${errors.endDate
-                                                ? "border-red-300 focus:border-red-400 focus:ring-red-100"
-                                                : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
+                                            ? "border-red-300 focus:border-red-400 focus:ring-red-100"
+                                            : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
                                             }`}
                                     />
 
@@ -748,8 +720,8 @@ const CreateBatch = () => {
                                             "startTime"
                                         )}
                                         className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:ring-2 ${errors.startTime
-                                                ? "border-red-300 focus:border-red-400 focus:ring-red-100"
-                                                : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
+                                            ? "border-red-300 focus:border-red-400 focus:ring-red-100"
+                                            : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
                                             }`}
                                     />
 
@@ -781,8 +753,8 @@ const CreateBatch = () => {
                                             "endTime"
                                         )}
                                         className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:ring-2 ${errors.endTime
-                                                ? "border-red-300 focus:border-red-400 focus:ring-red-100"
-                                                : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
+                                            ? "border-red-300 focus:border-red-400 focus:ring-red-100"
+                                            : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
                                             }`}
                                     />
 
@@ -827,8 +799,8 @@ const CreateBatch = () => {
                                         id="course"
                                         {...register("course")}
                                         className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:ring-2 ${errors.course
-                                                ? "border-red-300 focus:border-red-400 focus:ring-red-100"
-                                                : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
+                                            ? "border-red-300 focus:border-red-400 focus:ring-red-100"
+                                            : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
                                             }`}
                                     >
                                         <option value="">
@@ -881,8 +853,8 @@ const CreateBatch = () => {
                                         id="mentor"
                                         {...register("mentor")}
                                         className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:ring-2 ${errors.mentor
-                                                ? "border-red-300 focus:border-red-400 focus:ring-red-100"
-                                                : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
+                                            ? "border-red-300 focus:border-red-400 focus:ring-red-100"
+                                            : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
                                             }`}
                                     >
                                         <option value="">
@@ -947,8 +919,8 @@ const CreateBatch = () => {
 
                                         <div
                                             className={`min-h-[58px] rounded-xl border bg-white p-2 transition ${errors.students
-                                                    ? "border-red-300"
-                                                    : "border-gray-200"
+                                                ? "border-red-300"
+                                                : "border-gray-200"
                                                 }`}
                                         >
                                             <div className="flex min-h-11 flex-wrap items-center gap-2">
@@ -1027,8 +999,8 @@ const CreateBatch = () => {
                                                 )
                                             }
                                             className={`mt-2 flex w-full items-center justify-between rounded-xl border bg-white px-4 py-3 text-left text-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 ${studentDropdownOpen
-                                                    ? "border-gray-900 ring-gray-100"
-                                                    : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
+                                                ? "border-gray-900 ring-gray-100"
+                                                : "border-gray-200 focus:border-gray-900 focus:ring-gray-100"
                                                 }`}
                                         >
                                             <span className="text-gray-600">
@@ -1045,8 +1017,8 @@ const CreateBatch = () => {
                                             <ChevronDown
                                                 size={18}
                                                 className={`text-gray-500 transition-transform ${studentDropdownOpen
-                                                        ? "rotate-180"
-                                                        : ""
+                                                    ? "rotate-180"
+                                                    : ""
                                                     }`}
                                             />
                                         </button>
@@ -1130,8 +1102,8 @@ const CreateBatch = () => {
                                                                             )
                                                                         }
                                                                         className={`flex w-full items-center justify-between rounded-xl px-3 py-3 text-left transition ${selected
-                                                                                ? "bg-gray-900 text-white"
-                                                                                : "text-gray-800 hover:bg-gray-50"
+                                                                            ? "bg-gray-900 text-white"
+                                                                            : "text-gray-800 hover:bg-gray-50"
                                                                             }`}
                                                                     >
                                                                         <div className="min-w-0">
@@ -1147,8 +1119,8 @@ const CreateBatch = () => {
 
                                                                         <div
                                                                             className={`ml-3 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border ${selected
-                                                                                    ? "border-white bg-white text-gray-900"
-                                                                                    : "border-gray-300"
+                                                                                ? "border-white bg-white text-gray-900"
+                                                                                : "border-gray-300"
                                                                                 }`}
                                                                         >
                                                                             {selected && (
@@ -1220,8 +1192,8 @@ const CreateBatch = () => {
                                                                 )
                                                             }
                                                             className={`rounded-xl border px-3 py-3 text-sm font-medium transition ${selected
-                                                                    ? "border-gray-900 bg-gray-900 text-white shadow-sm"
-                                                                    : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                                                                ? "border-gray-900 bg-gray-900 text-white shadow-sm"
+                                                                : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
                                                                 }`}
                                                         >
                                                             {day.slice(

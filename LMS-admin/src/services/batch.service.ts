@@ -23,3 +23,23 @@ export const getBatchStudents = async (
 
     return response.data;
 };
+
+
+
+export const getFormData = async () => {
+    const [
+        courseResponse,
+        mentorResponse,
+        studentResponse,
+    ] = await Promise.all([
+        api.get("/course/list"),
+        api.get("/staff/mentor/list"),
+        api.get("/student"),
+    ]);
+
+    return {
+        courses: courseResponse.data.data ?? [],
+        mentors: mentorResponse.data.data ?? [],
+        students: studentResponse.data.data ?? [],
+    };
+};
