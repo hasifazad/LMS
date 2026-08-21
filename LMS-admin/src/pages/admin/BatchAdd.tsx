@@ -18,7 +18,8 @@ import {
     AlertCircle,
     CheckCircle2,
 } from "lucide-react";
-import { getFormData } from "../../services/batch.service";
+import { createBatch, getFormData } from "../../services/batch.service";
+import { AxiosError } from "axios";
 
 /* -------------------------------------------------------------------------- */
 /*                                   TYPES                                    */
@@ -428,63 +429,7 @@ const CreateBatch = () => {
             setSubmitError("");
             setSubmitSuccess("");
 
-            /*
-             * The API expects:
-             * - startDate / endDate as ISO dates
-             * - startTime / endTime as ISO datetime values
-             *
-             * Since this is a recurring batch schedule,
-             * both times are based on the start date.
-             */
-
-            const payload = {
-                batchName: values.batchName.trim(),
-
-                startDate: new Date(
-                    `${values.startDate}T00:00:00`
-                ).toISOString(),
-
-                endDate: new Date(
-                    `${values.endDate}T00:00:00`
-                ).toISOString(),
-
-                startTime: new Date(
-                    `${values.startDate}T${values.startTime}`
-                ).toISOString(),
-
-                endTime: new Date(
-                    `${values.startDate}T${values.endTime}`
-                ).toISOString(),
-
-                day: values.day,
-
-                course: values.course,
-
-                mentor: values.mentor,
-
-                students: values.students,
-            };
-
-            const response = await fetch(
-                "http://localhost:3000/api/v1/batch",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-                    },
-                    body: JSON.stringify(payload),
-                }
-            );
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(
-                    data?.message ||
-                    "Failed to create batch"
-                );
-            }
+            const data = await createBatch(values);
 
             console.log("Batch created:", data);
 
@@ -502,8 +447,9 @@ const CreateBatch = () => {
             );
 
             setSubmitError(
-                error instanceof Error
-                    ? error.message
+                error instanceof AxiosError
+                    ? error.response?.data?.message ??
+                    "Failed to create batch."
                     : "Something went wrong while creating the batch."
             );
         }

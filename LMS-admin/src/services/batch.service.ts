@@ -43,3 +43,52 @@ export const getFormData = async () => {
         students: studentResponse.data.data ?? [],
     };
 };
+
+
+
+export const createBatch = async (values: {
+    batchName?: string;
+    startDate?: string;
+    endDate?: string;
+    startTime?: string;
+    endTime?: string;
+    mentor?: string;
+    course?: string;
+    day?: string[];
+    students?: string[];
+}) => {
+    const payload = {
+        batchName: values.batchName.trim(),
+
+        startDate: new Date(
+            `${values.startDate}T00:00:00`
+        ).toISOString(),
+
+        endDate: new Date(
+            `${values.endDate}T00:00:00`
+        ).toISOString(),
+
+        startTime: new Date(
+            `${values.startDate}T${values.startTime}`
+        ).toISOString(),
+
+        endTime: new Date(
+            `${values.startDate}T${values.endTime}`
+        ).toISOString(),
+
+        day: values.day,
+
+        course: values.course,
+
+        mentor: values.mentor,
+
+        students: values.students,
+    };
+
+    const response = await api.post(
+        "/batch",
+        payload
+    );
+
+    return response.data;
+};
