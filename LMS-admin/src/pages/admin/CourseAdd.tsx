@@ -29,14 +29,14 @@ interface Instructor {
 }
 
 interface CourseFormData {
-    courseCode: string;
-    courseName: string;
-    description: string;
-    duration: number | null;
-    image: FileList | null;
-    syllabus: FileList | null;
-    instructors: string[];
-    modules: {
+    courseCode?: string;
+    courseName?: string;
+    description?: string;
+    duration?: number | null;
+    image?: FileList | null;
+    syllabus?: FileList | null;
+    instructors?: string[];
+    modules?: {
         name: string;
     }[];
 }
@@ -46,7 +46,7 @@ interface CourseFormData {
 // Validation
 // -----------------------------------------------------------------------------
 
-const courseSchema: yup.ObjectSchema<CourseFormData> =
+const courseSchema: any =
     yup.object({
         courseCode: yup
             .string()
@@ -273,9 +273,7 @@ const AddCourse = () => {
             {/* Form */}
             <main className="mx-auto max-w-5xl px-6 py-8">
                 <form
-                    onSubmit={handleSubmit(
-                        onSubmit
-                    )}
+                    onSubmit={handleSubmit(onSubmit)}
                     className="space-y-8"
                 >
                     {/* ----------------------------------------------------- */}

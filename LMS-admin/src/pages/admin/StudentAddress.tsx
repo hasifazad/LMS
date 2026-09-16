@@ -9,16 +9,16 @@ import * as yup from "yup";
 // ------------------------------------
 
 interface AddressFormData {
-    permanentAddressLine1: string;
+    permanentAddressLine1?: string;
     permanentAddressLine2?: string;
     permanentLandmark?: string;
-    permanentPinCode: string;
-    permanentCountry: string;
-    permanentState: string;
-    permanentDistrictCity: string;
+    permanentPinCode?: string;
+    permanentCountry?: string;
+    permanentState?: string;
+    permanentDistrictCity?: string;
     permanentPlace?: string;
 
-    sameAddress: boolean;
+    sameAddress?: boolean;
 
     currentAddressLine1?: string;
     currentDistrictCity?: string;
@@ -29,7 +29,7 @@ interface AddressFormData {
 // Yup Validation Schema
 // ------------------------------------
 
-const addressSchema = yup.object({
+const addressSchema:any = yup.object({
     permanentAddressLine1: yup
         .string()
         .required("Address Line 1 is required"),

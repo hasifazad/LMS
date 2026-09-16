@@ -7,11 +7,11 @@ import axios from "axios";
 import api from "../../services/api";
 
 interface TrainerFormValues {
-    firstName: string;
-    lastName: string;
-    email: string;
-    mobile: string;
-    password: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    mobile?: string;
+    password?: string;
 }
 
 const validationSchema: Yup.ObjectSchema<TrainerFormValues> = Yup.object({

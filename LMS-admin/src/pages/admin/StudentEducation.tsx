@@ -25,17 +25,17 @@ type EducationLevel =
     | "Master's";
 
 interface Education {
-    level: EducationLevel;
-    institution: string;
-    board: string;
-    year: string;
-    scoreType: ScoreType;
-    score: string;
+    level?: EducationLevel;
+    institution?: string;
+    board?: string;
+    year?: string;
+    scoreType?: ScoreType;
+    score?: string;
     stream?: string;
 }
 
 interface EducationFormData {
-    educations: Education[];
+    educations?: Education[];
 }
 
 // --------------------------------------------------

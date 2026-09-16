@@ -25,20 +25,20 @@ type DocumentType =
     | "graduation";
 
 interface DocumentItem {
-    id: DocumentType;
-    title: string;
-    description: string;
-    required: boolean;
-    accept: string;
-    icon: React.ReactNode;
+    id?: DocumentType;
+    title?: string;
+    description?: string;
+    required?: boolean;
+    accept?: string;
+    icon?: React.ReactNode;
 }
 
 interface DocumentFormData {
-    photo: File | null;
-    aadhaar: File | null;
-    tenth: File | null;
-    twelfth: File | null;
-    graduation: File | null;
+    photo?: File | null;
+    aadhaar?: File | null;
+    tenth?: File | null;
+    twelfth?: File | null;
+    graduation?: File | null;
 }
 
 // --------------------------------------------------
