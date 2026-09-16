@@ -17,16 +17,10 @@ const ProtectedRoute = ({
 
     let role = location.pathname.split('/')[1]
 
-    console.log(role);
-
-    console.log(allowedRoles);
-    
-
 
     const setUser = useAuthStore((state) => state.login);
     // Not Logged In
     if (!user && role == 'student') {
-        console.log('hellooo');
 
         return <Navigate to="/student/login" replace />;
     } else {
@@ -34,7 +28,6 @@ const ProtectedRoute = ({
     }
 
     if (!admin && role == 'admin') {
-        console.log('hellooo');
 
         return <Navigate to="/admin/login" replace />;
     } else {

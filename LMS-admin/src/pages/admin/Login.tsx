@@ -36,7 +36,7 @@ const AdminLoginPage = () => {
       alert("Login Successful");
 
       localStorage.setItem('admin', JSON.stringify({ email: initialValues.email }))
-      navigate("/admin/dashboard")
+      navigate("/admin")
     } else {
       alert("Invalid Credentials");
     }

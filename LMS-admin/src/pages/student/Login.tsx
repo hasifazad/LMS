@@ -69,7 +69,7 @@ const StudentLoginPage = () => {
             setUser(user, '');
             localStorage.setItem("user", JSON.stringify(user))
 
-            navigate("/student");
+            navigate("/student", { replace: true });
 
         } catch (err) {
             if (axios.isAxiosError(err)) {

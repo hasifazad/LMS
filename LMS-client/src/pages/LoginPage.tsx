@@ -53,7 +53,7 @@ const LoginPage: React.FC = () => {
 
 
 
-        let result = await fetchData.post('/staff/login-password', data)
+        let result = await fetchData.post('/trainer/login-password', data)
 
         try {
             if (true) {

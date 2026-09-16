@@ -42,8 +42,9 @@ const HomePage = () => {
                 role.path == '' ?
                   <>
                     <a
-                      href={import.meta.env.VITE_STUDENT_URL}
                       className="rounded-xl border border-gray-200 bg-white p-8 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+                      href={import.meta.env.VITE_STUDENT_URL}
+                      target="_blank"
                     >
                       <h2 className="text-2xl font-semibold text-gray-900">
                         {role.title}
@@ -60,7 +61,7 @@ const HomePage = () => {
                   </> :
                   <button
                     key={role.title}
-                    onClick={() => navigate(role.path)}
+                    onClick={() => window.open(role.path, "_blank")}
                     className="rounded-xl border border-gray-200 bg-white p-8 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
                   >
                     <h2 className="text-2xl font-semibold text-gray-900">

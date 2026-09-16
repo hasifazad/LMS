@@ -94,6 +94,9 @@ const StudentBatches = () => {
 
                 const batches = await getBatches();
 
+                console.log(batches);
+                
+
                 setBatches(batches);
             } catch (error) {
                 console.error("Failed to fetch batches:", error);
@@ -112,7 +115,7 @@ const StudentBatches = () => {
     const filteredBatches = useMemo(() => {
         return batches.filter((batch) => {
             const mentorName =
-                `${batch.mentor.firstName} ${batch.mentor.lastName}`.toLowerCase();
+                `${batch?.mentor.firstName} ${batch?.mentor.lastName}`.toLowerCase();
 
             const courseName =
                 batch.course.courseName.toLowerCase();
@@ -276,11 +279,11 @@ const StudentBatches = () => {
     /* ---------------------------------------------------------------------- */
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
+        <div className="min-h-screen bg-gray-50 px-4">
 
             <div className="mx-auto max-w-7xl space-y-6">
                 {/* Header */}
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                     <div>
                         <h1 className="text-3xl font-semibold text-gray-900">
                             Batches
@@ -314,34 +317,14 @@ const StudentBatches = () => {
                             />
                         </div>
 
-                        {/* Mentor */}
-                        {/* <input
-              type="text"
-              placeholder="Filter by mentor..."
-              value={mentorFilter}
-              onChange={(e) =>
-                setMentorFilter(e.target.value)
-              }
-              className="rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-black"
-            /> */}
 
-                        {/* Course */}
-                        {/* <input
-              type="text"
-              placeholder="Filter by course..."
-              value={courseFilter}
-              onChange={(e) =>
-                setCourseFilter(e.target.value)
-              }
-              className="rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-black"
-            /> */}
                     </div>
                 </div>
 
                 {/* Table */}
                 <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white">
                     <table className="w-full border-collapse">
-                        <thead className="bg-gray-50">
+                        <thead className="border-slate-200 bg-slate-100">
                             {table
                                 .getHeaderGroups()
                                 .map((headerGroup) => (

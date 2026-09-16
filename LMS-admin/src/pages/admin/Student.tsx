@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Pencil, Plus } from "lucide-react";
+import { Pencil, Plus, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
     flexRender,
@@ -26,6 +26,22 @@ export default function StudentsList() {
 
     const [students, setStudents] = useState<Student[]>([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
+
+    const filteredStudents = useMemo(() => {
+        const query = search.trim().toLowerCase();
+
+        if (!query) return students;
+
+        return students.filter((student) =>
+            [
+                `${student.firstName} ${student.lastName}`,
+                student.email,
+                student.enrollmentNumber,
+                student.status,
+            ].some((value) => value?.toLowerCase().includes(query))
+        );
+    }, [search, students]);
 
     const columns = useMemo<ColumnDef<Student>[]>(
         () => [
@@ -92,7 +108,7 @@ export default function StudentsList() {
     );
 
     const table = useReactTable({
-        data: students,
+        data: filteredStudents,
         columns,
         getCoreRowModel: getCoreRowModel(),
     });
@@ -118,61 +134,79 @@ export default function StudentsList() {
     return (
         <>
             {/* Add Student Button */}
-            <div className="mb-6 flex justify-end">
-                <button
-                    type="button"
-                    onClick={() =>
-                        navigate("/admin/student/create")
-                    }
-                    className="
-                        group
-                        inline-flex
-                        cursor-pointer
-                        items-center
-                        gap-2
-                        rounded-xl
-                        border
-                        border-gray-200
-                        bg-white
-                        px-4
-                        py-2.5
-                        text-sm
-                        font-medium
-                        text-gray-700
-                        transition-all
-                        duration-200
-                        hover:border-gray-300
-                        hover:bg-gray-50
-                        hover:text-black
-                    "
-                >
-                    <Plus
-                        size={16}
-                        className="
+            <div className="px-4 space-y-6">
+
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="text-3xl font-semibold text-gray-900">
+                            Students
+                        </h1>
+
+                        <p className="mt-2 text-sm text-gray-500">
+                            View and explore all students.
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() =>
+                            navigate("/admin/student/create")
+                        }
+                        className="group inline-flex cursor-pointer items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-all duration-200 hover:border-gray-300 hover:bg-gray-50 hover:text-black"
+                    >
+                        <Plus
+                            size={16}
+                            className="
                             transition-transform
                             duration-200
                             group-hover:rotate-90
                         "
-                    />
+                        />
 
-                    <span>Add Student</span>
-                </button>
-            </div>
+                        <span>Add Student</span>
+                    </button>
+                </div>
 
-            {/* Table */}
-            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                <table className="min-w-full text-sm">
-                    {/* Header */}
-                    <thead>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <tr
-                                key={headerGroup.id}
-                                className="border-b border-slate-200 bg-slate-100"
-                            >
-                                {headerGroup.headers.map((header) => (
-                                    <th
-                                        key={header.id}
-                                        className="
+                {/* Filters */}
+                <div className="rounded-3xl border border-gray-200 bg-white p-5">
+                    <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+                        {/* Search */}
+                        <div className="relative">
+                            <Search
+                                size={16}
+                                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                            />
+
+                            <input
+                                type="text"
+                                placeholder="Search students..."
+                                value={search}
+                                onChange={(event) => setSearch(event.target.value)}
+
+                                className="w-full rounded-2xl border border-gray-200 bg-white py-3 pl-11 pr-4 text-sm outline-none transition focus:border-black"
+                            />
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+
+
+                {/* Table */}
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                    <table className="min-w-full text-sm">
+                        {/* Header */}
+                        <thead>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <tr
+                                    key={headerGroup.id}
+                                    className="border-b border-slate-200 bg-slate-100"
+                                >
+                                    {headerGroup.headers.map((header) => (
+                                        <th
+                                            key={header.id}
+                                            className="
                                             px-5
                                             py-3
                                             text-left
@@ -182,96 +216,98 @@ export default function StudentsList() {
                                             tracking-wide
                                             text-slate-500
                                         "
-                                    >
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                header.column
-                                                    .columnDef.header,
-                                                header.getContext()
-                                            )}
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-
-                    {/* Body */}
-                    <tbody>
-                        {/* Loading */}
-                        {loading ? (
-                            Array.from({
-                                length: SKELETON_ROWS,
-                            }).map((_, rowIndex) => (
-                                <tr
-                                    key={rowIndex}
-                                    className="border-b border-slate-100"
-                                >
-                                    {columns.map((column, index) => (
-                                        <td
-                                            key={column.id ?? index}
-                                            className="px-5 py-4"
                                         >
-                                            <div
-                                                className="
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(
+                                                    header.column
+                                                        .columnDef.header,
+                                                    header.getContext()
+                                                )}
+                                        </th>
+                                    ))}
+                                </tr>
+                            ))}
+                        </thead>
+
+                        {/* Body */}
+                        <tbody>
+                            {/* Loading */}
+                            {loading ? (
+                                Array.from({
+                                    length: SKELETON_ROWS,
+                                }).map((_, rowIndex) => (
+                                    <tr
+                                        key={rowIndex}
+                                        className="border-b border-slate-100"
+                                    >
+                                        {columns.map((column, index) => (
+                                            <td
+                                                key={column.id ?? index}
+                                                className="px-5 py-4"
+                                            >
+                                                <div
+                                                    className="
                                                     h-4
                                                     w-full
                                                     animate-pulse
                                                     rounded
                                                     bg-slate-200
                                                 "
-                                            />
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))
-                        ) : students.length === 0 ? (
-                            /* Empty */
-                            <tr>
-                                <td
-                                    colSpan={columns.length}
-                                    className="
+                                                />
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))
+                            ) : filteredStudents.length === 0 ? (
+                                /* Empty */
+                                <tr>
+                                    <td
+                                        colSpan={columns.length}
+                                        className="
                                         px-5
                                         py-10
                                         text-center
                                         text-slate-400
                                     "
-                                >
-                                    No students found
-                                </td>
-                            </tr>
-                        ) : (
-                            /* Data */
-                            table.getRowModel().rows.map((row, rowIndex) => (
-                                <tr
-                                    key={row.id}
-                                    className={`
+                                    >
+                                        {search.trim() ? "No students match your search" : "No students found"}
+                                    </td>
+                                </tr>
+                            ) : (
+                                /* Data */
+                                table.getRowModel().rows.map((row, rowIndex) => (
+                                    <tr
+                                        key={row.id}
+                                        className={`
                                         border-b
                                         border-slate-100
                                         transition-colors
                                         hover:bg-slate-100
                                         ${rowIndex % 2 === 1
-                                            ? "bg-slate-50/40"
-                                            : ""
-                                        }
+                                                ? "bg-slate-50/40"
+                                                : ""
+                                            }
                                     `}
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <td
-                                            key={cell.id}
-                                            className="px-5 py-4 text-slate-700"
-                                        >
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                                    >
+                                        {row.getVisibleCells().map((cell) => (
+                                            <td
+                                                key={cell.id}
+                                                className="px-5 py-4 text-slate-700"
+                                            >
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </>
     );

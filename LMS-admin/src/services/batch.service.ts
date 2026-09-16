@@ -33,7 +33,7 @@ export const getFormData = async () => {
         studentResponse,
     ] = await Promise.all([
         api.get("/course/list"),
-        api.get("/staff/mentor/list"),
+        api.get("/trainer/mentor/list"),
         api.get("/student"),
     ]);
 

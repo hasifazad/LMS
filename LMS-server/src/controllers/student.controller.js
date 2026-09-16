@@ -24,7 +24,7 @@ const {
     StudentAssignment
 } = require("../models/student.model");
 
-const { Staff } = require("../models/staff.model");
+const { Trainer } = require("../models/trainer.model");
 const { Counter } = require("../models/organisation.model");
 
 
@@ -199,7 +199,7 @@ module.exports = {
                 return res.status(400).json({ message: 'Email is required' });
             }
 
-            const emailExist = await Staff(req.db).findOne({ email });
+            const emailExist = await Trainer(req.db).findOne({ email });
 
             if (!emailExist) {
                 return res.status(404).json({ message: 'Email does not exist' });
@@ -287,7 +287,7 @@ module.exports = {
                 },
                 {
                     $lookup: {
-                        from: "staffs",
+                        from: "trainers",
                         localField: "mentor",
                         foreignField: "_id",
                         as: "mentor",
@@ -396,7 +396,7 @@ module.exports = {
             let studentsList = await Student(req.db).aggregate([
                 {
                     $lookup: {
-                        from: "staffs",
+                        from: "trainers",
                         localField: "mentor",
                         foreignField: "_id",
                         as: "mentor",
@@ -782,7 +782,7 @@ module.exports = {
                 },
                 {
                     $lookup: {
-                        from: "staffs",
+                        from: "trainers",
                         localField: "mentor",
                         foreignField: "_id",
                         as: "mentor",

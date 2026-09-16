@@ -1,4 +1,4 @@
-const { Staff } = require("../models/staff.model")
+const { Trainer } = require("../models/trainer.model")
 const otpGenerator = require("../utils/otpGenerator")
 
 const argon2 = require('argon2')
@@ -28,19 +28,19 @@ let transporter = nodemailer.createTransport({
 module.exports = {
 
 
-    createStaff: async (req, res, next) => {
+    createTrainer: async (req, res, next) => {
         let { email, mobile, password, firstName, lastName } = req.body
         try {
-            let staffExist = await Staff(req.db).findOne({ email })
+            let trainerExist = await Trainer(req.db).findOne({ email })
 
-            if (staffExist) {
-                return res.status(400).json({ message: 'staff already exist' })
+            if (trainerExist) {
+                return res.status(400).json({ message: 'Trainer already exist' })
             }
 
 
             const hashedPassword = await argon2.hash(password);
 
-            let result1 = await Staff(req.db).create({
+            let result1 = await Trainer(req.db).create({
                 email,
                 mobile,
                 firstName,
@@ -49,12 +49,12 @@ module.exports = {
             })
 
 
-            res.status(200).json({ message: 'staff created successfully', data: '' })
+            res.status(200).json({ message: 'Trainer created successfully', data: '' })
         } catch (error) {
 
             console.log(error);
 
-            res.status(401).json({ message: 'staff creation failed', data: '' })
+            res.status(401).json({ message: 'Trainer creation failed', data: '' })
         }
 
 
@@ -63,10 +63,10 @@ module.exports = {
 
 
 
-    getStaff: async (req, res, next) => {
+    getTrainer: async (req, res, next) => {
         let { id } = req.query
         try {
-            let result = await Staff(req.db).findOne({ _id: id })
+            let result = await Trainer(req.db).findOne({ _id: id })
 
             console.log(result);
 
@@ -81,10 +81,10 @@ module.exports = {
         }
     },
 
-    getAllStaff: async (req, res, next) => {
+    getAllTrainer: async (req, res, next) => {
 
         try {
-            let result = await Staff(req.db).find()
+            let result = await Trainer(req.db).find()
 
             res.status(200).json({ message: 'students created successfully', data: result })
 
@@ -96,7 +96,7 @@ module.exports = {
         }
     },
 
-    updateStaff: async (req, res, next) => {
+    updateTrainer: async (req, res, next) => {
 
         let { id } = req.params
 
@@ -108,13 +108,13 @@ module.exports = {
 
 
         try {
-            let staffExist = await Staff(req.db).findOne({ email })
+            let TrainerExist = await Trainer(req.db).findOne({ email })
 
-            if (!staffExist) {
-                return res.status(400).json({ message: 'staff not exist' })
+            if (!TrainerExist) {
+                return res.status(400).json({ message: 'Trainer not exist' })
             }
 
-            let result1 = await Staff(req.db).create({
+            let result1 = await Trainer(req.db).create({
                 email,
                 mobile,
                 password
@@ -132,28 +132,28 @@ module.exports = {
     },
 
 
-    deleteStaff: async (req, res, next) => {
+    deleteTrainer: async (req, res, next) => {
         let { id } = req.params
 
         try {
-            let staffExist = await Staff(req.db).findOne({ email })
+            let TrainerExist = await Trainer(req.db).findOne({ email })
 
-            if (!staffExist) {
-                return res.status(400).json({ message: 'staff not exist' })
+            if (!TrainerExist) {
+                return res.status(400).json({ message: 'Trainer not exist' })
             }
 
-            let result = await Staff(req.db).deleteOne({
+            let result = await Trainer(req.db).deleteOne({
                 email,
                 mobile,
                 password
             })
 
-            res.status(200).json({ message: 'staff deleted successfully', data: '' })
+            res.status(200).json({ message: 'Trainer deleted successfully', data: '' })
         } catch (error) {
 
             console.log(error);
 
-            res.status(401).json({ message: 'staff deletion failed', data: '' })
+            res.status(401).json({ message: 'Trainer deletion failed', data: '' })
         }
     },
 
@@ -163,7 +163,7 @@ module.exports = {
 
         try {
 
-            let emailExist = await Staff(req.db).findOne({ email })
+            let emailExist = await Trainer(req.db).findOne({ email })
 
             if (!emailExist) {
                 return res.status(401).json({ message: 'Email not exist' });
@@ -178,7 +178,7 @@ module.exports = {
 
                 console.log(email);
 
-                let result = await Staff(req.db).findOne({ email })
+                let result = await Trainer(req.db).findOne({ email })
 
                 console.log(result);
 
@@ -213,7 +213,7 @@ module.exports = {
                 return res.status(400).json({ message: 'Email is required' });
             }
 
-            const emailExist = await Staff(req.db).findOne({ email });
+            const emailExist = await Trainer(req.db).findOne({ email });
 
             if (!emailExist) {
                 return res.status(404).json({ message: 'Email does not exist' });
@@ -222,13 +222,13 @@ module.exports = {
             const otp = otpGenerator(4);
             console.log('Generated OTP:', otp);
 
-            await Staff(req.db).updateOne({ email }, { $set: { otp } });
+            await Trainer(req.db).updateOne({ email }, { $set: { otp } });
 
             // const mailOptions = {
             //     from: process.env.EMAIL,
             //     to: email,
             //     subject: 'Your OTP Code',
-            //     html: emailTemplate(otp, 'staff-login-otp'),
+            //     html: emailTemplate(otp, 'Trainer-login-otp'),
 
 
             // }
@@ -248,14 +248,14 @@ module.exports = {
 
         let { email, otp } = req.body
 
-        let response = await Staff(req.db).findOne({ email })
+        let response = await Trainer(req.db).findOne({ email })
 
         if (response.otp !== otp) {
             return res.status(401).json({ message: 'Otp not valid' })
         }
 
-        await Staff(req.db).updateOne({ email }, { otp: "" })
-        let result = await Staff(req.db).findOne({ email })
+        await Trainer(req.db).updateOne({ email }, { otp: "" })
+        let result = await Trainer(req.db).findOne({ email })
 
         let token = jwt.sign({}, '123')
 
@@ -266,7 +266,7 @@ module.exports = {
     getMentors: async (req, res, next) => {
 
         try {
-            let result = await Staff(req.db).find({ role: 'mentor' }, { password: 0, otp: 0 })
+            let result = await Trainer(req.db).find({ role: 'mentor' }, { password: 0, otp: 0 })
 
             res.status(200).json({ message: 'Readed mentors succesfully', data: result })
 
@@ -274,7 +274,7 @@ module.exports = {
 
             console.log(error);
 
-            res.status(401).json({ message: 'staff failed', data: '' })
+            res.status(401).json({ message: 'Trainer failed', data: '' })
         }
 
 
@@ -282,7 +282,7 @@ module.exports = {
     getAllMentorNames: async (req, res, next) => {
 
         try {
-            let result = await Staff(req.db).find({ role: 'mentor' }, { _id: 1, firstName: 1, lastName: 1 })
+            let result = await Trainer(req.db).find({ role: 'mentor' }, { _id: 1, firstName: 1, lastName: 1 })
 
             res.status(200).json({ message: 'Readed mentors succesfully', data: result })
 
@@ -290,7 +290,7 @@ module.exports = {
 
             console.log(error);
 
-            res.status(401).json({ message: 'staff failed', data: '' })
+            res.status(401).json({ message: 'Trainer failed', data: '' })
         }
 
 

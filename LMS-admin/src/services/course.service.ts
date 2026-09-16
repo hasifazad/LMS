@@ -1,5 +1,13 @@
 import api from "./api";
 
+export const createCourse = async (data) => {
+  console.log(data);
+  
+  const response = await api.post("/course",data);
+  return response.data;
+};
+
+
 export const getAllCourses = async () => {
   const response = await api.get("/course");
   return response.data;

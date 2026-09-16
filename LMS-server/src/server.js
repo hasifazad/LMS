@@ -58,12 +58,12 @@ const databaseMiddleware = require('./middlewares/database.middleware');
 
 
 //  Load Models First
-require("./models/staff.model");
+require("./models/trainer.model");
 require("./models/student.model");
 
 
 //  Import Routes
-const staffRoutes = require('./routes/staff.routes');
+const trainerRoutes = require('./routes/trainer.routes');
 const studentRoutes = require('./routes/student.routes');
 const batchRoutes = require('./routes/batch.routes');
 const courseRoutes = require('./routes/course.routes');
@@ -78,7 +78,7 @@ app.use('/api/v1/organisation', organisationRoutes);
 app.use(databaseMiddleware);
 
 // ✅ Use Routes
-app.use('/api/v1/staff', staffRoutes);
+app.use('/api/v1/trainer', trainerRoutes);
 app.use('/api/v1/student', studentRoutes);
 app.use('/api/v1/batch', batchRoutes);
 app.use('/api/v1/course', courseRoutes);

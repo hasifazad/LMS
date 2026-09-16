@@ -11,6 +11,7 @@ import Search from "../components/Search"
 import noimg from '../assets/noimage.avif'
 
 import '../styles/style.css'
+import { useSelector } from "react-redux"
 
 
 const colors = [
@@ -55,6 +56,19 @@ const darkColors = [
     'outline-stone-500'
 ];
 
+type Student = {
+    _id: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    profilePicture?: string;
+    batch?: { batchCode?: string };
+    course?: { courseName?: string };
+};
+
+type MentorUser = {
+    _id: string;
+};
 
 
 
@@ -62,43 +76,86 @@ const darkColors = [
 
 
 
-let StudentsPage: React.FC = () => {
+const StudentsPage: React.FC = () => {
 
-    const [studentsList, setStudentsList] = useState([])
+    const [studentsList, setStudentsList] = useState<Student[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState("")
+    const [retryCount, setRetryCount] = useState(0)
 
 
 
-
+    const mentor = useSelector((state: { user: { value: MentorUser | null } }) => state.user.value)
 
 
     useEffect(() => {
-        (async () => {
+        let active = true
 
-
-
-            try {
-                let results = await fetchData.get(`/student/by-mentor?mentorId=${'68f4a1c6df2d0db135e0c831'}`)
-                console.log(results);
-
-
-                setStudentsList(results.data.data)
-            } catch (error) {
-                console.log(error);
-
-
+        const loadStudents = async () => {
+            if (!mentor?._id) {
+                if (active) {
+                    setLoading(false)
+                    setError("Unable to identify the mentor account.")
+                }
+                return
             }
 
+            setLoading(true)
+            setError("")
 
-        })()
+            try {
+                const results = await fetchData.get(`/student/by-mentor?mentorId=${mentor._id}`)
+                const students = Array.isArray(results.data?.data) ? results.data.data : []
 
-    }, [])
+                if (active) setStudentsList(students)
+            } catch (requestError: unknown) {
+                if (active) {
+                    setStudentsList([])
+                    setError(
+                        (requestError as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+                        "Unable to load students. Please try again."
+                    )
+                }
+            } finally {
+                if (active) setLoading(false)
+            }
+        }
+
+        void loadStudents()
+
+        return () => {
+            active = false
+        }
+    }, [mentor?._id, retryCount])
 
 
-
-    if (studentsList.length === 0) {
+    if (loading) {
         return (
             <div className='h-[70svh] flex items-center'>
                 <LoadingSpinner />
+            </div>
+        )
+    }
+
+    if (error) {
+        return (
+            <div className='h-[70svh] flex flex-col items-center justify-center gap-4 px-4 text-center'>
+                <p className='text-sm text-red-600'>{error}</p>
+                <button
+                    type='button'
+                    onClick={() => setRetryCount((count) => count + 1)}
+                    className='rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700'
+                >
+                    Try again
+                </button>
+            </div>
+        )
+    }
+
+    if (studentsList.length === 0) {
+        return (
+            <div className='h-[70svh] flex items-center justify-center px-4 text-center text-sm text-slate-500'>
+                No students are assigned to you yet.
             </div>
         )
     }
@@ -115,7 +172,7 @@ let StudentsPage: React.FC = () => {
                 <div
                     className='flex flex-wrap justify-center content-start md:justify-start cursor-pointer custom-scrollbar p-3 gap-5'>
                     {
-                        studentsList?.map((student: any, index) => {
+                        studentsList?.map((student, index) => {
 
                             return (
 

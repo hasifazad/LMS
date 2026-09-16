@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
     LayoutDashboard,
@@ -15,9 +15,15 @@ import {
     LogOut,
 } from "lucide-react";
 import { useAuthStore } from "../stores/authStore";
+import api from "../services/api";
 
 interface StudentLayoutProps {
     children: ReactNode;
+}
+
+interface StudentProfile {
+    email?: string;
+    enrollmentNumber?: string;
 }
 
 const sidebarItems = [
@@ -72,6 +78,15 @@ const StudentLayout = ({
     children,
 }: StudentLayoutProps) => {
     const { user, logout } = useAuthStore();
+    const [profile, setProfile] = useState<StudentProfile | null>(null);
+
+    useEffect(() => {
+        if (!user?._id) return;
+
+        api.get(`/student/${user._id}`)
+            .then((response) => setProfile(response.data?.data ?? null))
+            .catch(() => setProfile(null));
+    }, [user?._id]);
 
     let navigate = useNavigate()
     return (
@@ -113,7 +128,7 @@ const StudentLayout = ({
                 <button className="flex items-center gap-3 text-red-500 hover:bg-red-50 px-4 py-3 rounded-2xl transition-all"
                     onClick={() => {
                         localStorage.removeItem('user')
-                        navigate('/')
+                        navigate('/student')
                     }}
                 >
                     <LogOut size={20} />
@@ -151,17 +166,16 @@ const StudentLayout = ({
                     {/* Profile */}
                     <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-gray-50 p-3">
                         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-lg font-semibold text-white">
-                            {user?.firstName[0] + user?.lastName[0]}
+                            {`${user?.firstName?.[0] ?? ""}${user?.lastName?.[0] ?? ""}` || "S"}
                         </div>
 
                         <div>
                             <h3 className="text-sm font-semibold text-gray-900">
-                                MERN Stack Development
+                                {`${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim() || "Student"}
                             </h3>
 
-                            <p className="text-sm text-gray-500">
-                                Batch 2026 • Active Student
-                            </p>
+                            <p className="text-xs text-gray-500">{profile?.email ?? user?.email ?? "Email unavailable"}</p>
+                            <p className="text-xs text-gray-500">Enrollment: {profile?.enrollmentNumber ?? "Not assigned"}</p>
                         </div>
                     </div>
                 </div>

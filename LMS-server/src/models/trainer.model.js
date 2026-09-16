@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const staffSchema = new mongoose.Schema({
+const trainerSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     mobile: { type: String, required: true },
     password: { type: String, required: true },
@@ -15,7 +15,7 @@ const staffSchema = new mongoose.Schema({
     timestamps: true
 });
 
-mongoose.model('Staff', staffSchema)
+mongoose.model('Trainer', trainerSchema)
 
 
 const staffIdentityDetailsSchema = new mongoose.Schema({
@@ -38,8 +38,8 @@ const staffIdentityDetailsSchema = new mongoose.Schema({
 
 
 module.exports = {
-    Staff: (connection) => {
-        return connection.model('Staff', staffSchema)
+    Trainer: (connection) => {
+        return connection.model('Trainer', trainerSchema)
     },
     StaffIdentityDetails: (connection) => {
         return connection.model('StaffIdentityDetail', staffIdentityDetailsSchema)

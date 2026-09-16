@@ -1,9 +1,12 @@
+const { default: mongoose } = require("mongoose");
 const { Course } = require("../models/course.model")
 
 
 
 module.exports = {
     createCourse: async (req, res) => {
+        console.log(req.body);
+
 
         let {
             courseCode,
@@ -12,13 +15,21 @@ module.exports = {
             duration,
             instructors } = req.body
 
+
+
         try {
+            const instructorIds = instructors
+                .split(",")
+                .filter(Boolean)
+                .map((id) => new mongoose.Types.ObjectId(id));
+
+
             let response = await Course(req.db).create({
                 courseCode,
                 courseName,
                 description,
                 duration,
-                instructors
+                instructors: instructorIds
             })
             return res.status(201).json({
                 message: 'Course registered successfully!',
@@ -27,6 +38,9 @@ module.exports = {
 
 
         } catch (error) {
+
+            console.log(error);
+
 
             return res.status(500).json({
                 message: 'An error occurred while registering the course.',

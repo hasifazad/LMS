@@ -5,6 +5,7 @@ import {
     // Github,
     Globe,
 } from "lucide-react";
+import { FolderOpen } from "lucide-react";
 
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
@@ -70,6 +71,36 @@ const StudentProjects = () => {
     if (!user) {
         return (
             <Navigate to={'/student/login'} />
+        )
+    }
+
+    if (projects.length === 0) {
+        return (
+
+
+            <div className="flex min-h-[500px] items-center justify-center px-6">
+                <div className="flex max-w-md flex-col items-center text-center">
+                    {/* Icon */}
+                    <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gray-50">
+                        <FolderOpen
+                            size={38}
+                            strokeWidth={1.5}
+                            className="text-gray-400"
+                        />
+                    </div>
+
+                    {/* Heading */}
+                    <h1 className="text-xl font-semibold tracking-tight text-gray-800">
+                        No Projects Available
+                    </h1>
+
+                    {/* Description */}
+                    <p className="mt-2 max-w-sm text-sm leading-6 text-gray-500">
+                        You don't have any projects assigned yet. Once a project is
+                        assigned to you, it will appear here.
+                    </p>
+                </div>
+            </div>
         )
     }
 

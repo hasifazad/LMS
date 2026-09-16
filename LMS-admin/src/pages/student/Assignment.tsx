@@ -1,4 +1,4 @@
-import { CalendarDays, ChevronRight, FileText } from "lucide-react";
+import { CalendarDays, ChevronRight, ClipboardList, FileText, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import api from "../../services/api";
@@ -30,35 +30,111 @@ const AssignmentsPage = () => {
 
     const { user, logout } = useAuthStore();
 
-    let [assignments, setAssignments] = useState([])
+    const [assignments, setAssignments] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
     useEffect(() => {
+        if (!user?._id) return;
+
         const fetchAssignments = async () => {
             try {
+                setLoading(true);
+                setError(null);
+
                 const data = await getStudentAssignments(user._id);
 
-                setAssignments(data);
-
-                console.log(data);
+                setAssignments(data || []);
             } catch (error) {
                 console.error("Failed to fetch assignments:", error);
+                setError("Unable to load assignments. Please try again.");
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchAssignments();
     }, [user?._id]);
 
+    // User not logged in
     if (!user) {
-        return (
-            <Navigate to={'/student/login'} />
-        )
+        return <Navigate to="/student/login" replace />;
     }
 
-    if (assignments.length == 0) {
+    // Loading state
+    if (loading) {
         return (
-            <Loading />
-        )
+            <div className="flex min-h-[500px] items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-gray-800" />
+
+                    <p className="text-sm text-gray-500">
+                        Loading assignments...
+                    </p>
+                </div>
+            </div>
+        );
     }
 
+    // Error state
+    if (error) {
+        return (
+            <div className="flex min-h-[500px] items-center justify-center px-6">
+                <div className="text-center">
+                    <h2 className="text-lg font-semibold text-gray-800">
+                        Something went wrong
+                    </h2>
+
+                    <p className="mt-2 text-sm text-gray-500">
+                        {error}
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    // No assignments
+    if (assignments.length === 0) {
+        return (
+            <div className="flex min-h-[500px] items-center justify-center px-6">
+                <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-gray-100 bg-white px-8 py-14 text-center shadow-sm">
+
+                    {/* Decorative circles */}
+                    <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gray-50" />
+                    <div className="absolute -bottom-20 -left-16 h-44 w-44 rounded-full bg-gray-50" />
+
+                    <div className="relative">
+                        {/* Icon */}
+                        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gray-50">
+                            <ClipboardList
+                                size={38}
+                                strokeWidth={1.5}
+                                className="text-gray-400"
+                            />
+                        </div>
+
+                        {/* Label */}
+                        <div className="mb-3 flex items-center justify-center gap-1.5 text-xs font-medium text-gray-400">
+                            <Sparkles size={13} />
+                            ASSIGNMENTS
+                        </div>
+
+                        {/* Heading */}
+                        <h1 className="text-2xl font-semibold tracking-tight text-gray-800">
+                            No Assignments Yet
+                        </h1>
+
+                        {/* Description */}
+                        <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-gray-500">
+                            You don't have any assignments at the moment.
+                            New assignments will appear here once they are
+                            assigned to you.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
 
     return (

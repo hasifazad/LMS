@@ -1,7 +1,7 @@
 const Batch = require("../models/batch.model")
 const mongoose = require('mongoose')
 const { Student, CourseDetails } = require("../models/student.model");
-const { start } = require("repl");
+
 
 
 
@@ -45,6 +45,22 @@ module.exports = {
                 students,
                 modules
             })
+
+
+           
+
+            await Student(req.db).updateMany(
+                {
+                    _id: { $in: students }
+                },
+                {
+                    $set: {
+                        batch: response._id,
+                        course,
+                        mentor
+                    }
+                }
+            );
 
             res.status(200).json({ message: 'batch created successfully' })
 
@@ -115,7 +131,7 @@ module.exports = {
                 // Lookup mentor details
                 {
                     $lookup: {
-                        from: 'staffs',
+                        from: 'trainers',
                         localField: 'mentor',
                         foreignField: '_id',
                         as: 'mentor',
@@ -203,7 +219,7 @@ module.exports = {
                 // Lookup mentor details
                 {
                     $lookup: {
-                        from: 'staffs',
+                        from: 'trainers',
                         localField: 'mentor',
                         foreignField: '_id',
                         as: 'mentor',
@@ -288,7 +304,7 @@ module.exports = {
                 // Lookup mentor details
                 {
                     $lookup: {
-                        from: 'staffs',
+                        from: 'trainers',
                         localField: 'mentor',
                         foreignField: '_id',
                         as: 'mentor',

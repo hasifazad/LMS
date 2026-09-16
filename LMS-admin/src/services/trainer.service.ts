@@ -1,7 +1,7 @@
 import api from "./api";
 
 export const getMentors = async () => {
-  const response = await api.get("/staff/mentor/all");
+  const response = await api.get("/trainer/mentor/all");
 
 
   return response.data;
@@ -28,7 +28,7 @@ export const getMentorById = async (
   console.log(mentorId);
   
   const response = await api.get<MentorResponse>(
-    `/staff?id=${mentorId}`
+    `/trainer?id=${mentorId}`
   );
 
   console.log(response);

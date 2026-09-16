@@ -1,0 +1,14 @@
+{
+  "name": "lms",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix LMS-server\" \"npm run dev --prefix LMS-admin\" \"npm run dev --prefix LMS-client\"",
+    "server": "npm run dev --prefix LMS-server",
+    "admin": "npm run dev --prefix LMS-admin",
+    "student": "npm run dev --prefix LMS-client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.4"
+  }
+}

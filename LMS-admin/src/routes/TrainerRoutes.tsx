@@ -14,7 +14,7 @@ const TrainerRoutes = () => {
         <ProtectedRoute allowedRoles={["trainer"]}>
             <TrainerLayout>
                 <Routes>
-                    <Route path="dashboard" element={<HomePage />} />
+                    <Route path="/" element={<HomePage />} />
                 </Routes>
             </TrainerLayout>
         </ProtectedRoute>

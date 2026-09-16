@@ -15,7 +15,7 @@ const sidebarItems = [
     {
         title: "Dashboard",
         icon: LayoutDashboard,
-        path: "/trainer/dashboard",
+        path: "/trainer",
     },
     {
         title: "Attendance",

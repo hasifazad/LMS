@@ -80,7 +80,7 @@ let App: React.FC = () => {
   let user = useSelector((state: any) => state.user.value)
   useEffect(() => {
     let token = localStorage.getItem('token')
-    fetchData.get('/staff/validate', {
+    fetchData.get('/trainer/validate', {
       headers: {
         Authorization: `Bearer ${token}`
       }

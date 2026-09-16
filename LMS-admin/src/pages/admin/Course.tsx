@@ -1,6 +1,6 @@
 // components/CourseTable.tsx
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     ColumnDef,
     flexRender,
@@ -8,6 +8,8 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { getAllCourses } from "../../services/course.service";
+import { Plus, Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 type Course = {
     _id: string;
@@ -15,15 +17,6 @@ type Course = {
     courseName: string;
     duration: number;
 };
-
-const data: Course[] = [
-    {
-        _id: "651234a1b2c3d4e5f6789011",
-        courseCode: "MERN101",
-        courseName: "MERN Stack Development",
-        duration: 60,
-    },
-];
 
 const columns: ColumnDef<Course>[] = [
     {
@@ -48,8 +41,20 @@ const columns: ColumnDef<Course>[] = [
 const CourseTable = () => {
 
 
-    let [courses, setCourses] = useState([])
+    const [courses, setCourses] = useState<Course[]>([])
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
+
+    const filteredCourses = useMemo(() => {
+        const query = search.trim().toLowerCase();
+
+        if (!query) return courses;
+
+        return courses.filter((course) =>
+            [course.courseCode, course.courseName, `${course.duration} days`]
+                .some((value) => value?.toLowerCase().includes(query))
+        );
+    }, [courses, search]);
     useEffect(() => {
         const fetchStudents = async () => {
             try {
@@ -73,22 +78,73 @@ const CourseTable = () => {
     }, [])
 
     const table = useReactTable({
-        data: courses,
+        data: filteredCourses,
         columns,
         getCoreRowModel: getCoreRowModel(),
     });
 
+    const navigate = useNavigate();
+
     return (
-        <div className="w-full p-6">
-            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-                <div className="border-b border-gray-100 px-6 py-4">
-                    <h2 className="text-lg font-semibold text-gray-800">
-                        Course List
-                    </h2>
-                    <p className="mt-1 text-sm text-gray-500">
-                        Available training programs
+        <div className="w-full px-4 space-y-6">
+
+            <div className="flex justify-between items-center">
+                <div>
+                    <h1 className="text-3xl font-semibold text-gray-900">
+                        Courses
+                    </h1>
+
+                    <p className="mt-2 text-sm text-gray-500">
+                        View and explore all available courses.
                     </p>
                 </div>
+                <button
+                    type="button"
+                    onClick={() => navigate("/admin/course/add")}
+                    className="group inline-flex cursor-pointer items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-all duration-200 hover:border-gray-300 hover:bg-gray-50 hover:text-black"
+                >
+                    <Plus
+                        size={16}
+                        className="
+                            transition-transform
+                            duration-200
+                            group-hover:rotate-90
+                        "
+                    />
+
+                    <span>Add Course</span>
+                </button>
+            </div>
+
+            {/* Filters */}
+            <div className="rounded-3xl border border-gray-200 bg-white p-5">
+                <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+                    {/* Search */}
+                    <div className="relative">
+                        <Search
+                            size={16}
+                            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                        />
+
+                        <input
+                            type="text"
+                                placeholder="Search courses..."
+                                value={search}
+                                onChange={(event) => setSearch(event.target.value)}
+
+                            className="w-full rounded-2xl border border-gray-200 bg-white py-3 pl-11 pr-4 text-sm outline-none transition focus:border-black"
+                        />
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <div aria-busy={loading} className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+
+
+
 
                 <div className="overflow-x-auto">
                     <table className="w-full border-collapse">
@@ -111,7 +167,13 @@ const CourseTable = () => {
                         </thead>
 
                         <tbody>
-                            {table.getRowModel().rows.map((row) => (
+                            {table.getRowModel().rows.length === 0 ? (
+                                <tr>
+                                    <td colSpan={columns.length} className="px-6 py-10 text-center text-sm text-gray-500">
+                                        {search.trim() ? "No courses match your search" : "No courses found"}
+                                    </td>
+                                </tr>
+                            ) : table.getRowModel().rows.map((row) => (
                                 <tr
                                     key={row.id}
                                     className="border-t border-gray-100 transition-colors hover:bg-gray-50"
