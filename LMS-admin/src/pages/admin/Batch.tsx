@@ -118,7 +118,7 @@ const StudentBatches = () => {
                 `${batch?.mentor.firstName} ${batch?.mentor.lastName}`.toLowerCase();
 
             const courseName =
-                batch.course.courseName.toLowerCase();
+                batch.course?.courseName.toLowerCase();
 
             const matchesSearch =
                 batch.batchName
@@ -198,11 +198,11 @@ const StudentBatches = () => {
             cell: ({ row }) => (
                 <div>
                     <h3 className="font-medium text-gray-800">
-                        {row.original.course.courseName}
+                        {row.original?.course?.courseName}
                     </h3>
 
                     <p className="mt-1 text-xs text-gray-500">
-                        {row.original.course.courseCode}
+                        {row.original?.course?.courseCode}
                     </p>
                 </div>
             ),
@@ -406,7 +406,7 @@ const StudentBatches = () => {
                                 onClick={() =>
                                     table.previousPage()
                                 }
-                                disabled={
+                                disabled={ 
                                     !table.getCanPreviousPage()
                                 }
                                 className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium transition hover:bg-gray-50 disabled:opacity-50"

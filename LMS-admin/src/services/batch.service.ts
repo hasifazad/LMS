@@ -1,13 +1,49 @@
 import api from "./api";
 // import type { BatchResponse } from "../types/batch";
 
-// type BatchResponse;
+export interface BatchData {
+    batchName: string;
+    batchCode: string;
+    startDate: string;
+    endDate: string;
+    startTime: string;
+    endTime: string;
+    day: string[];
+    course: string;
+    mentor: string;
+    students: string[];
+    modules: {
+        moduleName: string;
+        status: "ongoing" | "completed";
+        startDate?: string;
+        completedDate?: string;
+    }[];
+}
 
 export const getBatches = async (): Promise<any> => {
     const response = await api.get<any>("/batch");
 
 
     return response.data.data;
+};
+
+export const getBatchById = async (batchId): Promise<any> => {
+    const response = await api.get<any>(`/batch/${batchId}`);
+
+
+    return response.data.data;
+};
+
+
+export const updateBatch = async (
+    batchId: string,
+    data: BatchData
+) => {
+    console.log(batchId);
+    
+    const response = await api.put(`/batch/${batchId}`, data);
+
+    return response.data;
 };
 
 
@@ -84,6 +120,9 @@ export const createBatch = async (values: {
 
         students: values.students,
     };
+
+    console.log(payload);
+    
 
     const response = await api.post(
         "/batch",

@@ -9,7 +9,7 @@ const courseSchema = new mongoose.Schema({
     duration: { type: Number },
     image: { type: String, default: null },
     syllabus: { type: String, default: null },
-    instructors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Staff' }],
+    instructors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Trainer' }],
     modules: [String]
 }, {
     timestamps: true

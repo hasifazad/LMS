@@ -47,7 +47,7 @@ module.exports = {
             })
 
 
-           
+
 
             await Student(req.db).updateMany(
                 {
@@ -429,6 +429,65 @@ module.exports = {
 
         } catch (error) {
             res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+        }
+    },
+
+    updateBatch: async (req, res, next) => {
+        const { id } = req.params;
+
+        console.log(id);
+        console.log(req.body);
+        
+
+        try {
+            const {
+                batchName,
+                batchCode,
+                startDate,
+                endDate,
+                startTime,
+                endTime,
+                day,
+                course,
+                mentor,
+                students,
+                modules,
+            } = req.body;
+
+            const updatedBatch = await Batch(req.db).findByIdAndUpdate(
+                id,
+                {
+                    batchName,
+                    batchCode,
+                    startDate,
+                    endDate,
+                    startTime,
+                    endTime,
+                    day,
+                    course,
+                    mentor,
+                    students,
+                    modules,
+                },
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            );
+
+            if (!updatedBatch) {
+                return res.status(404).json({
+                    message: "Batch not found",
+                });
+            }
+
+            res.status(200).json({
+                message: "Batch updated successfully",
+                batch: updatedBatch,
+            });
+
+        } catch (error) {
+            next(error);
         }
     },
 

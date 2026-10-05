@@ -130,7 +130,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Last Month Admissions */}
-                <div className="mt-6">
+                {/* <div className="mt-6">
                     <div className="rounded-xl border border-gray-200 bg-white p-6">
                         <div className="flex items-center justify-between">
                             <div>
@@ -163,7 +163,7 @@ const AdminDashboard = () => {
                             </p>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

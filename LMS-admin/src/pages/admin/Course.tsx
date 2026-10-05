@@ -1,5 +1,3 @@
-// components/CourseTable.tsx
-
 import React, { useEffect, useMemo, useState } from "react";
 import {
     ColumnDef,
@@ -7,9 +5,9 @@ import {
     getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { getAllCourses } from "../../services/course.service";
-import { Plus, Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { deleteCourse, getAllCourses } from "../../services/course.service";
+import { Eye, Plus, Search, Trash2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 type Course = {
     _id: string;
@@ -18,32 +16,78 @@ type Course = {
     duration: number;
 };
 
-const columns: ColumnDef<Course>[] = [
-    {
-        accessorKey: "courseCode",
-        header: "Course Code",
-    },
-    {
-        accessorKey: "courseName",
-        header: "Course Name",
-    },
-    {
-        accessorKey: "duration",
-        header: "Duration",
-        cell: ({ row }) => (
-            <span className="text-gray-600">
-                {row.original.duration} Days
-            </span>
-        ),
-    },
-];
+
+
+
+
+
+
 
 const CourseTable = () => {
-
 
     const [courses, setCourses] = useState<Course[]>([])
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
+
+    const columns: ColumnDef<Course>[] = [
+        {
+            accessorKey: "courseCode",
+            header: "Course Code",
+        },
+        {
+            accessorKey: "courseName",
+            header: "Course Name",
+        },
+        {
+            accessorKey: "duration",
+            header: "Duration",
+            cell: ({ row }) => (
+                <span className="text-gray-600">
+                    {row.original.duration} Days
+                </span>
+            ),
+        },
+        {
+            id: "actions",
+            header: "Actions",
+            cell: ({ row }) => {
+                const course = row.original;
+
+                return (
+
+                    <button
+                        type="button"
+                        onClick={() =>
+                            navigate(`/admin/course/${course._id}`)
+                        }
+                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100"
+                        title="View course"
+                    >
+                        <Eye size={18} />
+                    </button>
+                );
+            },
+        },
+        {
+            id: "actions",
+            header: "Actions",
+            cell: ({ row }) => {
+                const course = row.original;
+
+                return (
+                    <button
+                        type="button"
+                        onClick={() => handleDelete(course._id)}
+                        className="inline-flex items-center justify-center rounded-md p-2 text-red-600 hover:bg-red-50"
+                        title="Delete course"
+                    >
+                        <Trash2 size={18} />
+                    </button>
+                );
+            },
+        },
+
+    ];
 
     const filteredCourses = useMemo(() => {
         const query = search.trim().toLowerCase();
@@ -55,27 +99,43 @@ const CourseTable = () => {
                 .some((value) => value?.toLowerCase().includes(query))
         );
     }, [courses, search]);
+
+    const fetchCourses = async () => {
+        try {
+            setLoading(true);
+            const courseList = await getAllCourses();
+            setCourses(courseList.data);
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+            setLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchStudents = async () => {
-            try {
-                setLoading(true);
 
 
-
-                const courseList = await getAllCourses();
-                setCourses(courseList.data);
-                setLoading(false);
-
-
-            } catch (error) {
-                console.error(error);
-                setLoading(false);
-            }
-        };
-
-        fetchStudents();
+        fetchCourses();
 
     }, [])
+
+    const handleDelete = async (courseId: string) => {
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this course?"
+        );
+
+        if (!confirmed) return;
+
+        try {
+            await deleteCourse(courseId);
+
+            fetchCourses();
+
+        } catch (error) {
+            console.error("Failed to delete course:", error);
+        }
+    };
+
+    console.log(filteredCourses);
 
     const table = useReactTable({
         data: filteredCourses,
@@ -87,7 +147,6 @@ const CourseTable = () => {
 
     return (
         <div className="w-full px-4 space-y-6">
-
             <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-semibold text-gray-900">
@@ -111,7 +170,6 @@ const CourseTable = () => {
                             group-hover:rotate-90
                         "
                     />
-
                     <span>Add Course</span>
                 </button>
             </div>
@@ -125,27 +183,19 @@ const CourseTable = () => {
                             size={16}
                             className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
                         />
-
                         <input
                             type="text"
-                                placeholder="Search courses..."
-                                value={search}
-                                onChange={(event) => setSearch(event.target.value)}
+                            placeholder="Search courses..."
+                            value={search}
+                            onChange={(event) => setSearch(event.target.value)}
 
                             className="w-full rounded-2xl border border-gray-200 bg-white py-3 pl-11 pr-4 text-sm outline-none transition focus:border-black"
                         />
                     </div>
-
-
                 </div>
             </div>
 
-
             <div aria-busy={loading} className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-
-
-
-
                 <div className="overflow-x-auto">
                     <table className="w-full border-collapse">
                         <thead className="bg-gray-50">
@@ -174,11 +224,14 @@ const CourseTable = () => {
                                     </td>
                                 </tr>
                             ) : table.getRowModel().rows.map((row) => (
+
                                 <tr
                                     key={row.id}
-                                    className="border-t border-gray-100 transition-colors hover:bg-gray-50"
+                                    className="border-t border-gray-100 transition-colors hover:bg-gray-50 cursor-pointer"
+                                   
                                 >
                                     {row.getVisibleCells().map((cell) => (
+
                                         <td
                                             key={cell.id}
                                             className="px-6 py-4 text-sm text-gray-700"
@@ -188,6 +241,7 @@ const CourseTable = () => {
                                                 cell.getContext()
                                             )}
                                         </td>
+
                                     ))}
                                 </tr>
                             ))}
@@ -198,8 +252,5 @@ const CourseTable = () => {
         </div>
     );
 };
-
-
-
 
 export default CourseTable;

@@ -68,6 +68,7 @@ const studentRoutes = require('./routes/student.routes');
 const batchRoutes = require('./routes/batch.routes');
 const courseRoutes = require('./routes/course.routes');
 const organisationRoutes = require('./routes/organisation.routes');
+const feedbackRoutes = require("./routes/feedback.routes");
 const adminRoutes = require('./routes/admin.routes');
 
 
@@ -82,8 +83,10 @@ app.use('/api/v1/trainer', trainerRoutes);
 app.use('/api/v1/student', studentRoutes);
 app.use('/api/v1/batch', batchRoutes);
 app.use('/api/v1/course', courseRoutes);
-
 app.use('/api/v1/admin', adminRoutes);
+
+
+app.use("/api/v1/feedback", feedbackRoutes);
 
 
 

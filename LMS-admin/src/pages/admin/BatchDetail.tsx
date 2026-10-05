@@ -10,6 +10,7 @@ import {
     Mail,
     Phone,
     Plus,
+    Pencil,
 
 } from "lucide-react";
 import { getBatchStudents } from "../../services/batch.service";
@@ -113,7 +114,7 @@ const BatchDetails = () => {
     const [batch, setBatch] = useState<Batch | null>(null);
     const [loading, setLoading] = useState(true);
 
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchBatch = async () => {
@@ -192,18 +193,27 @@ const BatchDetails = () => {
                             </div>
                         </div>
 
-                        {/* Students Count */}
-                        <div className="rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white">
-                            {batch.students.length} Students
-                        </div>
+
+
+
+
+                        <button
+                            type="button"
+                            onClick={() => navigate(`/admin/batch/${id}/edit`)}
+                            className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm"
+                        >
+                            <Pencil size={16} />
+                            Edit
+                        </button>
                     </div>
+
                 </div>
 
                 {/* ---------------------------------------------------------------- */}
                 {/* INFO GRID */}
                 {/* ---------------------------------------------------------------- */}
 
-                <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+                <div className="grid grid-cols-1 gap-6 xl:grid-cols-4">
                     {/* Course */}
                     <div className="rounded-3xl border border-gray-200 bg-white p-6">
                         <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-gray-200 bg-gray-50">
@@ -215,11 +225,11 @@ const BatchDetails = () => {
                         </h2>
 
                         <p className="mt-2 text-gray-700">
-                            {batch.course.courseName}
+                            {batch.course?.courseName}
                         </p>
 
                         <p className="mt-1 text-sm text-gray-500">
-                            {batch.course.courseCode}
+                            {batch.course?.courseCode}
                         </p>
                     </div>
 
@@ -263,6 +273,25 @@ const BatchDetails = () => {
                                 hour: "2-digit",
                                 minute: "2-digit",
                             })}
+                        </p>
+                    </div>
+                    
+                    {/* Students Count */}
+                    <div className="rounded-3xl border border-gray-200 bg-white p-6">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-gray-200 bg-gray-50">
+                            <Users size={20} />
+                        </div>
+
+                        <h2 className="mt-5 text-lg font-semibold text-gray-900">
+                            Students
+                        </h2>
+
+                        <p className="mt-2 text-2xl font-semibold text-gray-900">
+                            {batch.students.length}
+                        </p>
+
+                        <p className="mt-1 text-sm text-gray-500">
+                            Enrolled students
                         </p>
                     </div>
                 </div>

@@ -17,6 +17,11 @@ export const deleteUser = async (id: string) => {
   return response.data;
 };
 
+export const updateTrainer = async (id: string, data: any) => {
+  const response = await api.put(`/trainer/${id}`, data);
+  return response.data;
+};
+
 // services/mentorService.ts
 
 
@@ -26,7 +31,7 @@ export const getMentorById = async (
   mentorId: string
 ): Promise<MentorResponse> => {
   console.log(mentorId);
-  
+
   const response = await api.get<MentorResponse>(
     `/trainer?id=${mentorId}`
   );

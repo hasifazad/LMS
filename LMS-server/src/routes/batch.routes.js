@@ -10,8 +10,9 @@ const {
     getAllBatches,
     getBatchWithStudentDetails,
 
-    addOrRemoveStudent
+    addOrRemoveStudent,
 
+    updateBatch
 } = require('../controllers/batches.controller');
 
 
@@ -31,6 +32,8 @@ router.get('/:batchId', getBatch);
 router.get('/', getAllBatches);
 
 router.post('/', createBatch);
+
+router.put('/:id', updateBatch);
 
 
 

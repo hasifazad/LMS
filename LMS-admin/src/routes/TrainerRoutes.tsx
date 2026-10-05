@@ -8,6 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "../pages/admin/Dashboard";
 import TrainerLayout from "../layouts/TrainerLayout";
 import ProtectedRoute from "./ProtectedRoutes";
+import TrainerEditForm from "../pages/admin/TrainerEdit";
 
 const TrainerRoutes = () => {
     return (
@@ -15,6 +16,7 @@ const TrainerRoutes = () => {
             <TrainerLayout>
                 <Routes>
                     <Route path="/" element={<HomePage />} />
+                    
                 </Routes>
             </TrainerLayout>
         </ProtectedRoute>

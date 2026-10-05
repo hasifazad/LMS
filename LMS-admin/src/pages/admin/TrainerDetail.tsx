@@ -28,7 +28,7 @@ import {
     Pencil,
 } from "lucide-react";
 import { getMentorById } from "../../services/trainer.service";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 
@@ -50,6 +50,7 @@ const TrainerDetail = ({
 
     console.log(id);
 
+    let navigate = useNavigate()
 
     useEffect(() => {
         const fetchMentor = async () => {
@@ -161,6 +162,9 @@ const TrainerDetail = ({
                 <button
                     type="button"
                     className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                    onClick={()=>{
+                        navigate(`/admin/trainer/${id}/edit`)
+                    }}
                 >
                     <Pencil size={16} />
 

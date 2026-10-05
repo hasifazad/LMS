@@ -52,43 +52,77 @@ module.exports = {
     },
     updateCourse: async (req, res) => {
 
-        let { id } = req.params
-
-        let { courseCode,
-            courseName,
-            description,
-            duration,
-            instructors } = req.body
+        const { id } = req.params;
 
         try {
-            let response = await Course(req.db).create({
+            const CourseModel = Course(req.db);
+
+            let {
                 courseCode,
                 courseName,
                 description,
                 duration,
-                instructors
-            })
-            return res.status(201).json({
-                message: 'Course updated successfully!',
-                data: response,
-            });
+                instructors,
+                modules
+            } = req.body;
 
+
+            modules = modules.map(module => module.name);
+
+            const updateData = {
+                courseCode,
+                courseName,
+                description,
+                duration,
+                instructors,
+                modules,
+            };
+
+            if (req.files?.image?.[0]) {
+                updateData.image = req.files.image[0].filename;
+            }
+
+            if (req.files?.syllabus?.[0]) {
+                updateData.syllabus = req.files.syllabus[0].filename;
+            }
+
+            const updatedCourse = await CourseModel.findByIdAndUpdate(
+                id,
+                updateData,
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            );
+
+            if (!updatedCourse) {
+                return res.status(404).json({
+                    message: "Course not found",
+                });
+            }
+
+            return res.status(200).json({
+                message: "Course updated successfully!",
+                data: updatedCourse,
+            });
 
         } catch (error) {
+            console.log(error);
 
             return res.status(500).json({
-                message: 'An error occurred while registering the course.',
+                message: "An error occurred while updating the course.",
                 error: error.message,
             });
-
         }
-
     },
     getCourseById: async (req, res) => {
-        let { id } = req.query
+        let { id } = req.params
+        console.log(id);
 
         try {
             let response = await Course(req.db).findOne({ _id: id })
+            console.log(response);
+
             return res.status(201).json({
                 message: 'Course readed successfully!',
                 data: response,

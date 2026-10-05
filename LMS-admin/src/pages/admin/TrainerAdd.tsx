@@ -53,7 +53,7 @@ const TrainerAdd = () => {
         setSubmitError("");
 
         try {
-            await api.post("/staff", { ...values, role: "mentor" });
+            await api.post("/trainer", { ...values, role: "mentor" });
             setCreated(true);
             reset();
         } catch (error: unknown) {

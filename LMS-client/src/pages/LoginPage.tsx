@@ -17,7 +17,7 @@ const LoginPage: React.FC = () => {
     })
 
     let [code, setCode] = useState('')
-    let [isOrgCode, setIsOrgCode] = useState(false)
+    let [isOrgCode, setIsOrgCode] = useState(true)
 
 
 
@@ -35,7 +35,7 @@ const LoginPage: React.FC = () => {
     }
 
     function next() {
-        setIsOrgCode(true)
+        // setIsOrgCode(true)
     }
 
     function getOrgCode(e: any) {

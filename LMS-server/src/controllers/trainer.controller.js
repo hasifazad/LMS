@@ -96,40 +96,58 @@ module.exports = {
         }
     },
 
+
     updateTrainer: async (req, res, next) => {
+        const { id } = req.params;
 
-        let { id } = req.params
-
-        let {
+        const {
             firstName,
-            lastName,
+            email,
+            mobile,
 
-            role } = req.body
+        } = req.body;
+
+        console.log(req.params);
+        console.log(req.body);
 
 
         try {
-            let TrainerExist = await Trainer(req.db).findOne({ email })
+            const trainer = await Trainer(req.db).findByIdAndUpdate(
+                id,
+                {
+                    firstName,
 
-            if (!TrainerExist) {
-                return res.status(400).json({ message: 'Trainer not exist' })
+                    email,
+                    mobile,
+
+                },
+                {
+                    new: true,
+                    runValidators: true
+                }
+            );
+
+            if (!trainer) {
+                return res.status(404).json({
+                    message: "Trainer not found"
+                });
             }
 
-            let result1 = await Trainer(req.db).create({
-                email,
-                mobile,
-                password
-            })
+            res.status(200).json({
+                message: "Trainer updated successfully",
+                data: trainer
+            });
 
-
-
-            res.status(200).json({ message: 'students created successfully', data: '' })
         } catch (error) {
-
             console.log(error);
 
-            res.status(401).json({ message: 'students creation failed', data: '' })
+            res.status(500).json({
+                message: "Trainer update failed"
+            });
         }
     },
+
+
 
 
     deleteTrainer: async (req, res, next) => {

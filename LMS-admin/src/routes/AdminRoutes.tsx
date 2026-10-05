@@ -16,6 +16,10 @@ import PageNotFound from "../components/common/PageNotFound";
 import TrainerDetail from "../pages/admin/TrainerDetail";
 import AddCourse from "../pages/admin/CourseAdd";
 import TrainerAdd from "../pages/admin/TrainerAdd";
+import EditBatch from "../pages/admin/BatchEdit";
+import CourseDetail from "../pages/admin/CourseDetail";
+import CourseEdit from "../pages/admin/CourseEdit";
+import TrainerEditForm from "../pages/admin/TrainerEdit";
 
 // import ProtectedRoute from "./ProtectedRoute";
 
@@ -46,13 +50,19 @@ const AdminRoutes = () => {
                     <Route path="/trainer" element={<TrainersList />} />
                     <Route path="/trainer/:id" element={<TrainerDetail />} />
                     <Route path="/trainer/create" element={<TrainerAdd />} />
+                    <Route path="/trainer/:id/edit" element={<TrainerEditForm />} />
 
                     {/* Courses */}
                     <Route path="/course" element={<CourseList />} />
+                    <Route path="/course/:id" element={<CourseDetail />} />
                     <Route path="/course/add" element={<AddCourse />} />
+                    <Route path="/course/:id/edit" element={<CourseEdit />} />
+
+                    {/* Batches */}
                     <Route path="/batch" element={<StudentBatches />} />
                     <Route path="/batch/:id" element={<BatchDetails />} />
                     <Route path="/batch/add" element={<CreateBatch />} />
+                    <Route path="/batch/:id/edit" element={<EditBatch />} />
                     <Route path="/learning" element={<LearningJourney />} />
                     <Route path="/*" element={<PageNotFound />} />
 

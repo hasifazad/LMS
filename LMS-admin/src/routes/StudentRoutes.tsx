@@ -16,6 +16,7 @@ import StudentLoginPage from "../pages/student/Login";
 import ProjectDetails from "../pages/student/ProjectDetail";
 import StudentSettings from "../pages/student/Settings";
 import UpdateStudent from "../components/student/UpdateStudent";
+import Feedback from "../pages/student/FeedBack";
 
 const StudentRoutes = () => {
     return (
@@ -34,6 +35,7 @@ const StudentRoutes = () => {
                     <Route path="/projects" element={<StudentProjects />} />
                     <Route path="/projects/:id" element={<ProjectDetails />} />
                     <Route path="/setting" element={<StudentSettings />} />
+                    <Route path="/feedback" element={<Feedback />} />
                     <Route path="/edit/:id" element={<UpdateStudent />} />
                 </Routes>
             </StudentLayout>
