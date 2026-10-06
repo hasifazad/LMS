@@ -6,6 +6,7 @@ import {
     GraduationCap,
     BookOpen,
     LogOut,
+    ScanQrCode,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -106,10 +107,21 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                         </p>
                     </div>
 
+                    {/*  */}
+                    <button
+                        onClick={() => navigate("/admin/student/qr-scanner")}
+                        className="flex items-center gap-2"
+                    >
+                        <ScanQrCode size={20} />
+                        Scan Student
+                    </button>
+
                     <div className="w-11 h-11 rounded-full bg-gray-900 text-white flex items-center justify-center font-semibold">
                         A
                     </div>
                 </header>
+
+
 
                 {/* Content */}
                 <main className="flex-1 p-8 overflow-y-auto">

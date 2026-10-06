@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Pencil, Plus, Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
     flexRender,
     getCoreRowModel,
@@ -49,7 +49,16 @@ export default function StudentsList() {
                 id: "fullName",
                 header: "Full Name",
                 accessorFn: (row) =>
-                    `${row.firstName} ${row.lastName}`,
+                    `${row.firstName ?? ""} ${row.lastName ?? ""}`.trim(),
+
+                cell: ({ row }) => (
+                    <Link
+                        to={`/admin/student/${row.original._id}`}
+                        className="font-medium text-blue-600 hover:underline"
+                    >
+                        {row.original.firstName} {row.original.lastName}
+                    </Link>
+                ),
             },
             {
                 accessorKey: "email",
@@ -87,22 +96,7 @@ export default function StudentsList() {
                     );
                 },
             },
-            {
-                id: "actions",
-                header: "",
-                cell: ({ row }) => (
-                    <button
-                        type="button"
-                        onClick={() =>
-                            navigate(`/admin/student/update/${row.original._id}`)
-                        }
-                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-mediumtext-slate-600 shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 active:scale-95"
-                    >
-                        <Pencil size={13} strokeWidth={2} />
-                        Edit
-                    </button>
-                ),
-            },
+           
         ],
         [navigate]
     );

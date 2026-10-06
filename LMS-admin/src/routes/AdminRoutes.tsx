@@ -20,6 +20,8 @@ import EditBatch from "../pages/admin/BatchEdit";
 import CourseDetail from "../pages/admin/CourseDetail";
 import CourseEdit from "../pages/admin/CourseEdit";
 import TrainerEditForm from "../pages/admin/TrainerEdit";
+import QRScannerPage from "../pages/admin/QRScannerPage";
+import StudentDetails from "../pages/admin/StudentDetail";
 
 // import ProtectedRoute from "./ProtectedRoute";
 
@@ -44,7 +46,13 @@ const AdminRoutes = () => {
                     {/* Students */}
                     <Route path="/student/create" element={<CreateStudentForm />} />
                     <Route path="/student" element={<StudentsList />} />
-                    <Route path="/student/update/:id" element={<UpdateStudent />} />
+                    <Route path="/student/:id/edit" element={<UpdateStudent />} />
+                    <Route path="/student/:id" element={<StudentDetails />} />
+
+                    <Route
+                        path="/student/qr-scanner"
+                        element={<QRScannerPage />}
+                    />
 
                     {/* Trainers */}
                     <Route path="/trainer" element={<TrainersList />} />
@@ -65,6 +73,9 @@ const AdminRoutes = () => {
                     <Route path="/batch/:id/edit" element={<EditBatch />} />
                     <Route path="/learning" element={<LearningJourney />} />
                     <Route path="/*" element={<PageNotFound />} />
+
+                    {/*  */}
+
 
                 </Routes>
             </AdminLayout>

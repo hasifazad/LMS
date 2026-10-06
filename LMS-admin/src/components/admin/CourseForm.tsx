@@ -19,29 +19,29 @@ import { getMentors } from "../../services/trainer.service";
 
 export interface Instructor {
     _id: string;
-    firstName: string;
-    lastName: string;
+    firstName?: string;
+    lastName?: string;
 }
 
 export interface CourseModule {
-    name: string;
+    name?: string;
 }
 
 export interface CourseFormData {
-    courseCode: string;
-    courseName: string;
-    description: string;
-    duration: number | null;
-    image: FileList | null;
-    syllabus: FileList | null;
-    instructors: string[];
-    modules: CourseModule[];
+    courseCode?: string;
+    courseName?: string;
+    description?: string;
+    duration?: number | null;
+    image?: FileList | null;
+    syllabus?: FileList | null;
+    instructors?: string[];
+    modules?: CourseModule[];
 }
 
 interface CourseFormProps {
-    mode: "create" | "edit";
+    mode?: "create" | "edit";
     defaultValues?: Partial<CourseFormData>;
-    onSubmit: (data: CourseFormData) => Promise<void>;
+    onSubmit?: (data: CourseFormData) => Promise<void>;
 }
 
 // -----------------------------------------------------------------------------

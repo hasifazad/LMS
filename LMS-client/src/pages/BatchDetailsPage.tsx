@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { fetchData } from '../axios/fetchData'
 import { LoadingSpinner } from '../components/Loading'
 import { converToDate, convertToTime } from '../utils/DateFormatConverter'
@@ -103,8 +103,8 @@ const BatchDetailsPage: React.FC = () => {
                         <p className="text-lg font-medium text-gray-900">{batch.course?.courseName}</p>
                     </div>
                     <div className="bg-white">
-                        <p className="text-sm text-gray-500">👨‍🏫 Mentor</p>
-                        <p className="text-lg font-medium text-gray-900">{batch.mentor?.firstName} {batch.mentor?.lastName}</p>
+                        <p className="text-sm text-gray-500">⏰ Time</p>
+                        <p className="text-lg font-medium text-gray-900">{convertToTime(batch.startTime)} - {convertToTime(batch.endTime)}</p>
                     </div>
                     <div className="bg-white">
                         <p className="text-sm text-gray-500">📅 Start Date</p>
@@ -123,10 +123,7 @@ const BatchDetailsPage: React.FC = () => {
                         }
 
                     </div>
-                    <div className="bg-white">
-                        <p className="text-sm text-gray-500">⏰ Time</p>
-                        <p className="text-lg font-medium text-gray-900">{convertToTime(batch.startTime)} - {convertToTime(batch.endTime)}</p>
-                    </div>
+
                 </div>
 
 
@@ -153,7 +150,9 @@ const BatchDetailsPage: React.FC = () => {
                         {batch.students?.map((student, index) => (
                             <tr key={student._id} className="border-t hover:bg-gray-50">
                                 <td className="px-6 py-4">{index + 1}</td>
-                                <td className="px-6 py-4">{student.firstName} {student.lastName}</td>
+                                <Link to={`/student/${student._id}`}>
+                                    <td className="px-6 py-4">{student.firstName} {student.lastName}</td>
+                                </Link>
                                 <td className="px-6 py-4">{student.email}</td>
                                 <td className="px-6 py-4">{student.mobileNumber}</td>
                                 <td className="px-6 py-4">

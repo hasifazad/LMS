@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import {
     CalendarDays,
@@ -275,7 +275,7 @@ const BatchDetails = () => {
                             })}
                         </p>
                     </div>
-                    
+
                     {/* Students Count */}
                     <div className="rounded-3xl border border-gray-200 bg-white p-6">
                         <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-gray-200 bg-gray-50">
@@ -405,10 +405,12 @@ const BatchDetails = () => {
 
                                         {/* Info */}
                                         <div>
-                                            <h3 className="text-lg font-semibold text-gray-900">
-                                                {student.firstName}{" "}
-                                                {student.lastName}
-                                            </h3>
+                                            <Link to={`/admin/student/${student._id}`}>
+                                                <h3 className="text-lg font-semibold text-gray-900">
+                                                    {student.firstName}{" "}
+                                                    {student.lastName}
+                                                </h3>
+                                            </Link>
 
                                             <p className="mt-1 text-sm text-gray-500">
                                                 {

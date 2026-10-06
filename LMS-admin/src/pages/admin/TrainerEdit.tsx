@@ -6,10 +6,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getMentorById, updateTrainer } from "../../services/trainer.service";
 
 interface TrainerFormData {
-    name: string;
-    email: string;
-    mobileNumber: string;
+    name?: string;
+    email?: string;
+    mobileNumber?: string;
 }
+
+
 
 interface TrainerEditProps {
     trainer: {
@@ -20,7 +22,7 @@ interface TrainerEditProps {
     onSubmit: (data: TrainerFormData) => void;
 }
 
-const schema = yup.object({
+const schema: yup.ObjectSchema<TrainerFormData> = yup.object({
     name: yup
         .string()
         .required("Trainer name is required"),
@@ -36,13 +38,15 @@ const schema = yup.object({
         .required("Mobile number is required"),
 });
 
-function TrainerEditForm({ trainer }: TrainerEditProps) {
+// type TrainerFormData = yup.InferType<typeof schema>;
+
+function TrainerEditForm() {
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors, isSubmitting },
-    } = useForm<TrainerFormData>({
+    } = useForm<TrainerFormData, any, TrainerFormData>({
         resolver: yupResolver(schema),
         defaultValues: {
             name: "",
@@ -83,11 +87,11 @@ function TrainerEditForm({ trainer }: TrainerEditProps) {
                 reset({
                     name: trainer.firstName,
                     email: trainer.email,
-                    mobileNumber: trainer?.mobile,
+                    mobileNumber: trainer.mobile,
                 });
             }
         })()
-    }, [trainer, reset]);
+    }, [reset]);
 
     return (
         <form

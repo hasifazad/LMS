@@ -30,7 +30,8 @@ const { Counter } = require("../models/organisation.model");
 
 
 let emailTemplate = require('../utils/email-templates')
-let transporter = require('../utils/email-transporter')
+let transporter = require('../utils/email-transporter');
+const batchModel = require("../models/batch.model");
 
 
 module.exports = {
@@ -59,7 +60,7 @@ module.exports = {
 
             let password = generateRandomPassword();   // generats a random password
             const hashedPassword = await argon2.hash(password);   //hash the password
-            
+
             const studentCount = await Student(req.db).find().count()
 
             console.log(studentCount);
@@ -77,7 +78,7 @@ module.exports = {
                 courseId
             })
 
-            
+
             console.log(joiningDate);
 
             await StudentCourse(req.db).create({
@@ -758,135 +759,46 @@ module.exports = {
      * @access Public
      */
     getAllStudentsByMentor: async (req, res, next) => {
+        console.log(req.query);
 
-        let { mentorId } = req.query;
-
-
-        console.log(mentorId);
-
+        const { mentorId } = req.query;
 
         try {
+            // Find all batches assigned to this mentor
+            const batches = await batchModel(req.db)
+                .find({ mentor: mentorId })
+                .select("students");
 
-            // Validate request query parameters
-            if (!mentorId) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Either mentor or mentorId must be provided.',
-                });
-            }
-
-            mentorId = new mongoose.Types.ObjectId(mentorId)
-            let students = await Student(req.db).aggregate([
-                {
-                    $match: { mentor: mentorId }
-                },
-                {
-                    $lookup: {
-                        from: "trainers",
-                        localField: "mentor",
-                        foreignField: "_id",
-                        as: "mentor",
-                        pipeline: [
-                            {
-                                "$project": {
-                                    "_id": 1,
-                                    "email": 1,
-                                    "firstName": 1,
-                                    "lastName": 1,
-                                }
-                            }
-                        ]
-                    }
-                },
-                { $unwind: { path: "$mentor", preserveNullAndEmptyArrays: true } },
-
-                // Lookup Batch Details
-                {
-                    $lookup: {
-                        from: "batches",
-                        localField: "batch",
-                        foreignField: "_id",
-                        as: "batch",
-                        pipeline: [
-                            {
-                                "$project": {
-                                    "_id": 1,
-                                    "batchName": 1,
-                                    "batchCode": 1,
-
-                                }
-                            }
-                        ]
-                    }
-                },
-                { $unwind: { path: "$batch", preserveNullAndEmptyArrays: true } },
-
-                // Lookup Course Details (from batch)
-                {
-                    $lookup: {
-                        from: "courses",
-                        localField: "course",
-                        foreignField: "_id",
-                        as: "course",
-                        pipeline: [
-                            {
-                                "$project": {
-                                    "_id": 1,
-                                    "courseName": 1,
-                                    "courseCode": 1,
-
-                                }
-                            }
-                        ]
-                    }
-                },
-                { $unwind: { path: "$course", preserveNullAndEmptyArrays: true } },
-
-                // Project only required fields
-                {
-                    $project: {
-                        _id: 1,
-                        email: 1,
-                        mobileNumber: 1,
-                        firstName: 1,
-                        lastName: 1,
-                        isBlocked: 1,
-                        status: 1,
-                        profilePicture: 1,
-                        enrollmentNumber: 1,
-                        github: 1,
-                        linkedin: 1,
-                        guardianName: 1,
-                        guardianMobileNumber: 1,
-                        resume: 1,
-                        mentor: 1,
-                        batch: 1,
-                        course: 1,
-                    }
-                }
-            ]);
-            console.log(students);
+            // Collect student IDs from all batches
+            const studentIds = batches.flatMap(
+                (batch) => batch.students
+            );
 
 
-            if (students.length === 0) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'No students found for the given mentor.',
-                });
-            }
 
-            res.status(200).json({
-                success: true,
-                message: 'Students retrieved successfully.',
+            // Remove duplicate student IDs
+            const uniqueStudentIds = [
+                ...new Set(
+                    studentIds.map((id) => id.toString())
+                ),
+            ];
+
+
+            // Fetch students
+            const students = await Student(req.db)
+                .find({
+                    _id: { $in: uniqueStudentIds },
+                })
+                .select("-password -otp");
+
+        
+            return res.status(200).json({
+                message: "Students fetched successfully",
                 data: students,
             });
+
         } catch (error) {
-            console.error('Error fetching students by mentor:', error);
-            res.status(500).json({
-                success: false,
-                message: 'An error occurred while fetching students.',
-                error: error.message,
-            });
+            next(error);
         }
     },
 
