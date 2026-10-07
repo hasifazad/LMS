@@ -1,0 +1,49 @@
+name: Deploy LMS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Go to LMS directory
+        run: |
+          cd /LMS
+
+      - name: Pull latest code
+        run: |
+          cd /LMS
+          git pull origin master
+
+      - name: Install backend dependencies
+        run: |
+          cd /LMS/LMS-server
+          npm install
+
+      - name: Install admin dependencies
+        run: |
+          cd /LMS/LMS-admin
+          npm install
+
+      - name: Build admin
+        run: |
+          cd /LMS/LMS-admin
+          npm run build
+
+      - name: Install client dependencies
+        run: |
+          cd /LMS/LMS-client
+          npm install
+
+      - name: Builclient
+        run: |
+          cd /LMS/LMS-client
+          npm run build
+
+      - name: Restart applications
+        run: |
+          pm2 restart all
