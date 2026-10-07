@@ -1,0 +1,19 @@
+name: Test Runner
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Test
+        run: |
+          echo "Hello from my Linux server!"
+          echo "Runner is working."
+          hostname
+          whoami
+          pwd
