@@ -12,36 +12,36 @@ jobs:
     steps:
       - name: Go to LMS directory
         run: |
-          cd /LMS
+          cd ~/LMS
 
       - name: Pull latest code
         run: |
-          cd /LMS
+          cd ~/LMS
           git pull origin master
 
       - name: Install backend dependencies
         run: |
-          cd /LMS/LMS-server
+          cd ~/LMS/LMS-server
           npm install
 
       - name: Install admin dependencies
         run: |
-          cd /LMS/LMS-admin
+          cd ~/LMS/LMS-admin
           npm install
 
       - name: Build admin
         run: |
-          cd /LMS/LMS-admin
+          cd ~/LMS/LMS-admin
           npm run build
 
       - name: Install client dependencies
         run: |
-          cd /LMS/LMS-client
+          cd ~/LMS/LMS-client
           npm install
 
       - name: Builclient
         run: |
-          cd /LMS/LMS-client
+          cd ~/LMS/LMS-client
           npm run build
 
       - name: Restart applications
