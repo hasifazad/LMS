@@ -6,6 +6,7 @@ import jsPDF from "jspdf";
 import certificate from '../../assets/certificate.png'
 import { useAuthStore } from "../../stores/authStore";
 import { Navigate } from "react-router-dom";
+import { useStudentAuthStore } from "../../stores/studentAuthStore";
 
 type CertificateProps = {
     studentName?: string;
@@ -25,7 +26,7 @@ const Certificate: React.FC<CertificateProps> = ({
     const certificateRef = useRef<HTMLDivElement>(null);
 
 
-    const { user } = useAuthStore();
+    const { student: user, logout } = useStudentAuthStore();
 
     const downloadCertificate = async () => {
         if (!certificateRef.current) return;

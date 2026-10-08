@@ -131,3 +131,70 @@ export const createBatch = async (values: {
 
     return response.data;
 };
+
+
+export interface Batch {
+    _id: string;
+    batchCode: string;
+    batchName: string;
+    startTime: string;
+    endTime: string;
+    course?: {
+        courseName?: string;
+    };
+}
+
+export const getMentorBatches = async (
+    mentorId: string
+): Promise<Batch[]> => {
+    const response = await api.get("/batch", {
+        params: {
+            mentorId,
+        },
+    });
+
+    return response.data.data;
+};
+
+
+export interface Student {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    status: string;
+    mobileNumber: string;
+}
+
+export interface Course {
+    courseName: string;
+}
+
+export interface Mentor {
+    firstName: string;
+    lastName: string;
+}
+
+export interface BatchDetails {
+    _id?: string;
+    batchCode: string;
+    batchName: string;
+    startTime: string;
+    endTime: string;
+    startDate: string;
+    endDate: string;
+    day: string[];
+    mentor: Mentor;
+    students: Student[];
+    course: Course;
+}
+
+export const getBatchDetails = async (
+    batchId: string
+): Promise<BatchDetails> => {
+    const response = await api.get(
+        `/batch/${batchId}/students`
+    );
+
+    return response.data.data;
+};

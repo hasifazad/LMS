@@ -3,6 +3,7 @@ import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { useAdminAuthStore } from "../../stores/adminAuthStore";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -22,6 +23,7 @@ const AdminLoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   let navigate = useNavigate()
+  let { admin, setAuth: setAdmin } = useAdminAuthStore((state) => state)
 
   const handleSubmit = (values: typeof initialValues) => {
     // Hardcoded credentials
@@ -34,8 +36,12 @@ const AdminLoginPage = () => {
       values.password === adminPassword
     ) {
       alert("Login Successful");
-
-      localStorage.setItem('admin', JSON.stringify({ email: initialValues.email }))
+      setAdmin({
+        _id: "123",
+        name: "admin",
+        email: "admin@gmail.com"
+      }, "")
+      // localStorage.setItem('admin', JSON.stringify({ email: initialValues.email }))
       navigate("/admin")
     } else {
       alert("Invalid Credentials");

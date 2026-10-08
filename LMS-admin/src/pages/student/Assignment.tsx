@@ -6,6 +6,7 @@ import { converToDate } from "../../utils/DateFormatConverter";
 import { useAuthStore } from "../../stores/authStore";
 import Loading from "../../components/common/Loading";
 import { getStudentAssignments } from "../../services";
+import { useStudentAuthStore } from "../../stores/studentAuthStore";
 
 // const assignments = [
 //     {
@@ -28,7 +29,7 @@ const AssignmentsPage = () => {
     const navigate = useNavigate();
 
 
-    const { user, logout } = useAuthStore();
+    const { student: user } = useStudentAuthStore();
 
     const [assignments, setAssignments] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);

@@ -6,7 +6,7 @@ import {
     type ColumnDef,
 } from "@tanstack/react-table";
 
-import { getMentors } from "../../services/trainer.service";
+import { getMentors } from "../../services/trainer/trainer.service";
 import { Eye, Plus, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 

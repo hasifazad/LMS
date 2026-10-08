@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
 import api from "../../services/api";
+import { useStudentAuthStore } from "../../stores/studentAuthStore";
+import toast from "react-hot-toast";
 
 interface LoginResponse {
     success: boolean;
@@ -25,7 +27,8 @@ const StudentLoginPage = () => {
 
     let navigate = useNavigate()
 
-    const setUser = useAuthStore((state) => state.login);
+    // const setUser = useAuthStore((state) => state.setUser);
+    let setAuth = useStudentAuthStore((state) => state.setAuth)
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -37,8 +40,6 @@ const StudentLoginPage = () => {
             setError("Please fill all fields.");
             return;
         }
-
-
 
         try {
             setLoading(true);
@@ -53,36 +54,20 @@ const StudentLoginPage = () => {
 
             const { data: user } = response.data;
 
-            // Save token if provided
-            // if (data.token) {
-            //     localStorage.setItem("token", data.token);
-            // }
-
-
-
             setSuccess(user.message || "Login successful");
 
-            console.log("User:", user);
-
-
-
-            setUser(user, '');
-            localStorage.setItem("user", JSON.stringify(user))
+            setAuth(user, user.token && "");
 
             navigate("/student", { replace: true });
+            toast.success("Login successful");
 
-        } catch (err) {
-            if (axios.isAxiosError(err)) {
-                setError(
-                    err.response?.data?.message ||
-                    err.message ||
-                    "Login failed"
-                );
-            } else if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError("Something went wrong.");
-            }
+        } catch (error) {
+            console.error(error);
+
+            toast.error(
+                error?.response?.data?.message ||
+                "Invalid email or password"
+            );
         } finally {
             setLoading(false);
         }

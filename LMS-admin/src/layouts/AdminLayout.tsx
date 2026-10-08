@@ -8,6 +8,7 @@ import {
     LogOut,
     ScanQrCode,
 } from "lucide-react";
+import { useAdminAuthStore } from "../stores/adminAuthStore";
 
 interface AdminLayoutProps {
     children: ReactNode;
@@ -44,6 +45,8 @@ const sidebarItems = [
 const AdminLayout = ({ children }: AdminLayoutProps) => {
 
     let navigate = useNavigate()
+
+    let { admin, setAuth: setAdmin, logout } = useAdminAuthStore(state => state)
 
     return (
         <div className="min-h-screen bg-[#f8fafc] flex">
@@ -83,7 +86,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
 
                 <button className="flex items-center gap-3 text-red-500 hover:bg-red-50 px-4 py-3 rounded-2xl transition-all"
                     onClick={() => {
-                        localStorage.removeItem('admin')
+                        logout()
                         navigate('/admin/login')
                     }}
                 >
@@ -116,9 +119,16 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                         Scan Student
                     </button>
 
-                    <div className="w-11 h-11 rounded-full bg-gray-900 text-white flex items-center justify-center font-semibold">
-                        A
+                    <div className="flex gap-3 items-center justify-center">
+                        <div className="w-11 h-11 rounded-full bg-gray-900 text-white flex items-center justify-center font-semibold">
+                            A
+                        </div>
+                        <div>
+                            <h1>{admin.name}</h1>
+                            <p>{admin.email}</p>
+                        </div>
                     </div>
+
                 </header>
 
 

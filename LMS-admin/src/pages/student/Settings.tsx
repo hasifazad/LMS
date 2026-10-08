@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     User,
     Mail,
@@ -11,28 +11,39 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
+import { useStudentAuthStore } from "../../stores/studentAuthStore";
+import { getStudentById } from "../../services";
+import Loading from "../../components/common/Loading";
 
 interface Student {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
-    phone: string;
+    mobileNumber: string;
     joinedDate: string;
 }
 
 const StudentSettings = () => {
 
-    const [student, setStudent] = useState<Student>({
-        name: "Hasif Azad",
-        email: "hasif@example.com",
-        phone: "+91 98765 43210",
-        joinedDate: "10 August 2026",
-    });
+    const [student, setStudent] = useState<Student | null>(null);
 
     const [isEditing, setIsEditing] = useState(false);
 
     const [formData, setFormData] = useState(student);
 
-    let { user } = useAuthStore()
+    const { student: user, logout } = useStudentAuthStore();
+
+
+    useEffect(() => {
+        (async () => {
+            let response = await getStudentById(user?._id)
+            let { data } = response
+            console.log(data);
+
+            setStudent(data)
+
+        })()
+    }, [])
 
     let navigate = useNavigate()
     const handleEdit = () => {
@@ -48,6 +59,10 @@ const StudentSettings = () => {
         setStudent(formData);
         setIsEditing(false);
     };
+
+    if (!student) {
+        return <Loading />
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 p-6">
@@ -108,7 +123,7 @@ const StudentSettings = () => {
 
                             <div>
                                 <h3 className="font-semibold text-gray-900">
-                                    {student.name}
+                                    {student.firstName + " " + student.lastName}
                                 </h3>
 
                                 <p className="text-sm text-gray-500">
@@ -131,11 +146,11 @@ const StudentSettings = () => {
                                 {isEditing ? (
                                     <input
                                         type="text"
-                                        value={formData.name}
+                                        value={formData.firstName}
                                         onChange={(e) =>
                                             setFormData({
                                                 ...formData,
-                                                name: e.target.value,
+                                                firstName: e.target.value,
                                             })
                                         }
                                         className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
@@ -143,7 +158,7 @@ const StudentSettings = () => {
                                 ) : (
                                     <div className="flex items-center gap-3 text-sm text-gray-700">
                                         <User size={17} className="text-gray-400" />
-                                        {student.name}
+                                        {student.firstName}
                                     </div>
                                 )}
                             </div>
@@ -185,11 +200,11 @@ const StudentSettings = () => {
                                 {isEditing ? (
                                     <input
                                         type="tel"
-                                        value={formData.phone}
+                                        value={formData.mobileNumber}
                                         onChange={(e) =>
                                             setFormData({
                                                 ...formData,
-                                                phone: e.target.value,
+                                                mobileNumber: e.target.value,
                                             })
                                         }
                                         className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
@@ -197,7 +212,7 @@ const StudentSettings = () => {
                                 ) : (
                                     <div className="flex items-center gap-3 text-sm text-gray-700">
                                         <Phone size={17} className="text-gray-400" />
-                                        {student.phone}
+                                        {student.mobileNumber}
                                     </div>
                                 )}
                             </div>

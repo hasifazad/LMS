@@ -10,6 +10,7 @@ import { useAuthStore } from "../../stores/authStore";
 import { useEffect, useState } from "react";
 import { getSingleStudentAssignment, getStudentAssignments } from "../../services";
 import Loading from "../../components/common/Loading";
+import { useStudentAuthStore } from "../../stores/studentAuthStore";
 
 // const assignment = {
 //     _id: "1",
@@ -40,7 +41,7 @@ export interface Assignment {
 const AssignmentDetails = () => {
     const { id } = useParams();
 
-    let { user } = useAuthStore()
+     const { student: user, logout } = useStudentAuthStore();
 
     const [assignment, setAssignment] = useState<Assignment>(null);
     const [loading, setLoading] = useState(true);

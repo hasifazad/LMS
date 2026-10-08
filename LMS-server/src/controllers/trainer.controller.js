@@ -189,32 +189,19 @@ module.exports = {
 
             const isMatch = await argon2.verify(emailExist.password, password);
 
-            console.log(isMatch);
-
-
             if (isMatch) {
-
-                console.log(email);
-
-                let result = await Trainer(req.db).findOne({ email })
-
-                console.log(result);
-
+                let { password, otp, ...result } = emailExist.toObject()
 
                 let token = jwt.sign({ email: result.email }, '123')
-
-                console.log(token);
-
 
                 return res.status(200).json({ message: 'Login successful', data: result, token });
             }
 
-
             res.status(401).json({ message: 'Login failed' });
 
-
         } catch (error) {
-
+            console.log(error);
+        
         }
 
 

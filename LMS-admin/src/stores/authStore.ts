@@ -1,34 +1,38 @@
 import { create } from "zustand";
 
-export interface User {
+interface User {
     _id: string;
-    firstName: string;
-    lastName: string;
     email: string;
-    role: string;
+    role: "admin" | "trainer" | "student";
+    name: string;
 }
 
-interface AuthStore {
+interface AuthState {
     user: User | null;
     token: string | null;
 
-    login: (user: User, token: string) => void;
+    setUser: (user: User) => void;
+    setToken: (token: string) => void;
     logout: () => void;
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthState>((set) => ({
     user: null,
-    token: null,
+    token: localStorage.getItem("token"),
 
-    login: (user, token) =>
-        set({
-            user,
-            token,
-        }),
+    setUser: (user) => set({ user }),
 
-    logout: () =>
+    setToken: (token) => {
+        localStorage.setItem("token", token);
+        set({ token });
+    },
+
+    logout: () => {
+        localStorage.removeItem("token");
+
         set({
             user: null,
             token: null,
-        }),
+        });
+    },
 }));

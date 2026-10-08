@@ -31,6 +31,7 @@ import { getStudentAttendance } from "../../services";
 import Loading from "../../components/common/Loading";
 import { useAuthStore } from "../../stores/authStore";
 import { Navigate } from "react-router-dom";
+import { useStudentAuthStore } from "../../stores/studentAuthStore";
 
 /* -------------------------------------------------------------------------- */
 /*                                   TYPES                                    */
@@ -72,7 +73,7 @@ const StudentAttendance = () => {
     const [selectedDate, setSelectedDate] = useState("");
 
 
-    let { user } = useAuthStore()
+     const { student: user } = useStudentAuthStore();
 
 
     /* ---------------------------------------------------------------------- */

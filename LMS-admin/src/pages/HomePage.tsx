@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -7,12 +7,12 @@ const HomePage = () => {
     {
       title: "Student",
       description: "Access your courses, assignments, and progress.",
-      path: "/student/login",
+      path: "/student",
     },
     {
       title: "Trainer",
       description: "Manage classes, students, and learning materials.",
-      path: "",
+      path: "/trainer",
     },
     {
       title: "Admin",
@@ -34,49 +34,36 @@ const HomePage = () => {
           </p>
         </div>
 
+        <Link to={import.meta.env.VITE_STUDENT_URL} target={"_blank"}>
+          trainer
+        </Link>
+
         <div className="grid gap-6 md:grid-cols-3">
           {roles.map((role) => (
 
-            <>
-              {
-                role.path == '' ?
-                  <>
-                    <a
-                      className="rounded-xl border border-gray-200 bg-white p-8 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
-                      href={import.meta.env.VITE_STUDENT_URL}
-                      target="_blank"
-                    >
-                      <h2 className="text-2xl font-semibold text-gray-900">
-                        {role.title}
-                      </h2>
+            <>{
 
-                      <p className="mt-3 text-sm leading-6 text-gray-600">
-                        {role.description}
-                      </p>
+            }
 
-                      <div className="mt-8 text-sm font-medium text-black">
-                        Continue →
-                      </div>
-                    </a>
-                  </> :
-                  <button
-                    key={role.title}
-                    onClick={() => window.open(role.path, "_blank")}
-                    className="rounded-xl border border-gray-200 bg-white p-8 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
-                  >
-                    <h2 className="text-2xl font-semibold text-gray-900">
-                      {role.title}
-                    </h2>
 
-                    <p className="mt-3 text-sm leading-6 text-gray-600">
-                      {role.description}
-                    </p>
+              <button
+                key={role.title}
+                onClick={() => window.open(role.path, "_blank")}
+                className="rounded-xl border border-gray-200 bg-white p-8 text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+              >
+                <h2 className="text-2xl font-semibold text-gray-900">
+                  {role.title}
+                </h2>
 
-                    <div className="mt-8 text-sm font-medium text-black">
-                      Continue →
-                    </div>
-                  </button>
-              }
+                <p className="mt-3 text-sm leading-6 text-gray-600">
+                  {role.description}
+                </p>
+
+                <div className="mt-8 text-sm font-medium text-black">
+                  Continue →
+                </div>
+              </button>
+
             </>
 
           ))}

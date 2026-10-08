@@ -27,7 +27,7 @@ import {
     AlertCircle,
     Pencil,
 } from "lucide-react";
-import { getMentorById } from "../../services/trainer.service";
+import { getMentorById } from "../../services/trainer/trainer.service";
 import { useNavigate, useParams } from "react-router-dom";
 
 

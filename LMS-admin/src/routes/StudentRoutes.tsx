@@ -21,10 +21,7 @@ import Feedback from "../pages/student/FeedBack";
 const StudentRoutes = () => {
     return (
         <ProtectedRoute allowedRoles={["student"]}>
-            <Routes>
-
-                <Route path="/login" element={<StudentLoginPage />} />
-            </Routes>
+            
             <StudentLayout>
                 <Routes>
                     <Route path="/" element={<StudentDashboard />} />

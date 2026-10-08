@@ -11,7 +11,7 @@ import {
     Trash2,
     Upload,
 } from "lucide-react";
-import { getMentors } from "../../services/trainer.service";
+import { getMentors } from "../../services/trainer/trainer.service";
 
 // -----------------------------------------------------------------------------
 // Types

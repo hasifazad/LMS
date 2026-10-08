@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useAuthStore } from "../stores/authStore";
 import api from "../services/api";
+import { useStudentAuthStore } from "../stores/studentAuthStore";
 
 interface StudentLayoutProps {
     children: ReactNode;
@@ -77,7 +78,7 @@ const sidebarItems = [
 const StudentLayout = ({
     children,
 }: StudentLayoutProps) => {
-    const { user, logout } = useAuthStore();
+    const { student: user, logout } = useStudentAuthStore();
     const [profile, setProfile] = useState<StudentProfile | null>(null);
 
     useEffect(() => {
@@ -127,8 +128,8 @@ const StudentLayout = ({
 
                 <button className="flex items-center gap-3 text-red-500 hover:bg-red-50 px-4 py-3 rounded-2xl transition-all"
                     onClick={() => {
-                        localStorage.removeItem('user')
-                        navigate('/student')
+                        logout()
+                        navigate('/student/login')
                     }}
                 >
                     <LogOut size={20} />

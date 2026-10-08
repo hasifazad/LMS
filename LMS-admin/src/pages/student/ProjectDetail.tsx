@@ -6,6 +6,7 @@ import { Pencil } from "lucide-react";
 import { getProjectById, updateProjectUrl } from "../../services";
 import EditUrlModal from "../../components/student/EditProjectUrlModal";
 import toast from "react-hot-toast";
+import { useStudentAuthStore } from "../../stores/studentAuthStore";
 
 interface Review {
     _id: string;
@@ -55,7 +56,7 @@ export default function ProjectDetails() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    const { user } = useAuthStore();
+    const { student: user, logout } = useStudentAuthStore();
 
 
     useEffect(() => {

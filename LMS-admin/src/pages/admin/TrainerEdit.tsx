@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
-import { getMentorById, updateTrainer } from "../../services/trainer.service";
+import { getMentorById, updateTrainer } from "../../services/trainer/trainer.service";
 
 interface TrainerFormData {
     name?: string;

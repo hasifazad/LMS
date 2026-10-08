@@ -12,6 +12,7 @@ import { useAuthStore } from "../../stores/authStore";
 import { useEffect, useState } from "react";
 import { getStudentProjects } from "../../services";
 import Loading from "../../components/common/Loading";
+import { useStudentAuthStore } from "../../stores/studentAuthStore";
 
 export interface Project {
     _id: string;
@@ -35,7 +36,7 @@ const StudentProjects = () => {
     const [error, setError] = useState<string | null>(null);
 
 
-    let { user } = useAuthStore()
+     const { student: user, logout } = useStudentAuthStore();
 
     useEffect(() => {
         const fetchProjects = async () => {

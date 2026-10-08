@@ -6,12 +6,10 @@ const connections = {};
 
 // Middleware to manage dynamic database connections
 async function databaseMiddleware(req, res, next) {
-    console.log(req.headers);
 
     try {
         // const orgCode = req.headers['x-organization-id']
         const orgCode = 'org1db'
-        console.log(orgCode);
 
 
         if (!orgCode) {
@@ -32,9 +30,6 @@ async function databaseMiddleware(req, res, next) {
 
         // Create a new connection
         const dbConnection = await mongoose.createConnection(dbConfig);
-
-        console.log('database connected');
-        
 
         // Cache the connection
         connections[orgCode] = dbConnection;

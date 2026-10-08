@@ -10,6 +10,7 @@ import { Navigate } from "react-router-dom";
 import Loading from "../../components/common/Loading";
 import api from "../../services/api";
 import { useAuthStore } from "../../stores/authStore";
+import { useStudentAuthStore } from "../../stores/studentAuthStore";
 
 type Module = {
     _id: string;
@@ -68,7 +69,7 @@ const formatDate = (date?: string) => {
 };
 
 const StudentDashboard = () => {
-    const { user } = useAuthStore();
+    const { student:user } = useStudentAuthStore();
     const [dashboard, setDashboard] = useState<DashboardData>(emptyDashboard);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");

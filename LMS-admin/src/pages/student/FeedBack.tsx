@@ -13,7 +13,8 @@ import {
     type Feedback as FeedbackType,
 } from "../../services/feedback.service";
 import { useAuthStore } from "../../stores/authStore";
-import { getMentors } from "../../services/trainer.service";
+import { getMentors } from "../../services/trainer/trainer.service";
+import { useStudentAuthStore } from "../../stores/studentAuthStore";
 
 interface Mentor {
     _id: string;
@@ -49,7 +50,7 @@ const Feedback = () => {
     }, [])
 
 
-    const { user } = useAuthStore();
+     const { student: user, logout } = useStudentAuthStore();
     // Fetch student's previous feedback
     const fetchFeedback = async () => {
         try {
