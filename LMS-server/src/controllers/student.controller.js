@@ -356,6 +356,8 @@ module.exports = {
                         mobileNumber: 1,
                         firstName: 1,
                         lastName: 1,
+                        dateOfBirth: 1,
+                        gender: 1,
                         isBlocked: 1,
                         status: 1,
                         profilePicture: 1,
@@ -497,6 +499,9 @@ module.exports = {
     updateStudentDetails: async (req, res, next) => {
         try {
             const { id } = req.params;
+
+            console.log(req.body);
+
 
             // Validate ObjectId
             if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -791,7 +796,7 @@ module.exports = {
                 })
                 .select("-password -otp");
 
-        
+
             return res.status(200).json({
                 message: "Students fetched successfully",
                 data: students,

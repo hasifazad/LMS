@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { getStudentById, updateStudent } from "../../../services";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { converToDate } from "../../../utils/DateFormatConverter";
 
 
 
@@ -54,7 +55,7 @@ const PersonalDetailsForm = () => {
     let { id } = useParams()
 
     console.log(id);
-    
+
 
 
     const handleSubmit = async (values: typeof initialValues) => {
@@ -85,6 +86,9 @@ const PersonalDetailsForm = () => {
             try {
                 let { data } = await getStudentById(id)
                 console.log(data);
+                const formattedDate = new Date(data?.dateOfBirth)
+                    .toISOString()
+                    .split("T")[0];
 
                 setInitialValues({
                     email: data?.email || "",
@@ -94,7 +98,7 @@ const PersonalDetailsForm = () => {
                     lastName: data?.lastName || "",
                     enrollmentNumber: data?.enrollmentNumber || "",
                     status: data?.status || "active",
-                    dateOfBirth: data?.dateOfBirth || "",
+                    dateOfBirth: converToDate(data?.dateOfBirth) || "",
                     gender: data?.gender || "",
                     guardianName: data?.guardianName || "",
                     guardianMobileNumber: data?.guardianMobileNumber || "",
@@ -227,7 +231,9 @@ const PersonalDetailsForm = () => {
                                     type="date"
                                     name="dateOfBirth"
                                     className={inputClass}
+
                                 />
+                              
                             </div>
 
                             <div>

@@ -31,7 +31,7 @@ export function converToDate(date: Date | string) {
     const month = String(d.getMonth() + 1).padStart(2, '0'); // Get month (0-indexed) and pad
     const year = d.getFullYear(); // Get the full year
 
-    return `${day}/${month}/${year}`;
+    return `${year}-${month}-${day}`;
 }
 
 export function getDayFromDate(date: Date) {

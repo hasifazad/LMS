@@ -81,6 +81,8 @@ const StudentDetails = () => {
 
                 // Replace this with your student service
                 const response = await getStudentById(id!);
+                console.log(response.data);
+                
                 setStudent(response.data);
 
                 console.log("Fetch student:", id);
