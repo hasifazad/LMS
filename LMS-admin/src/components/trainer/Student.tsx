@@ -1,9 +1,10 @@
+
 import React from "react";
-import { StudentObject } from "../types/student";
-import { converToDate } from "../utils/converToDate";
+// import { StudentObject } from "../../pages/trainer/StudentDetail";
+import { converToDate } from "../../utils/DateFormatConverter";
 
 interface StudentPersonalDetailsProps {
-    student: StudentObject;
+    student: any;
 }
 
 interface DetailFieldProps {
@@ -13,12 +14,14 @@ interface DetailFieldProps {
 
 const DetailField = ({ label, value }: DetailFieldProps) => {
     return (
-        <div className="w-full sm:w-96">
-            <p className="ms-2 mb-1 text-gray-500">{label}</p>
+        <div className="min-w-0">
+            <p className="mb-1.5 text-sm font-medium text-gray-500">
+                {label}
+            </p>
 
             <input
                 type="text"
-                className="border-2 w-full p-2 rounded-lg bg-white"
+                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-800 outline-none transition-colors focus:border-gray-300"
                 readOnly
                 value={value ?? "Not available"}
             />
@@ -30,15 +33,20 @@ const StudentPersonalDetails = ({
     student,
 }: StudentPersonalDetailsProps) => {
     return (
-        <>
+        <div className="space-y-6">
             {/* STUDENT DETAILS */}
-            <div className="mt-5">
-                <h1 className="ps-3 text-lg font-semibold">
-                    STUDENT DETAILS
-                </h1>
+            <section className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div className="border-b border-gray-100 px-5 py-4 md:px-6">
+                    <h1 className="text-base font-semibold text-gray-900">
+                        Student Details
+                    </h1>
+                    <p className="mt-1 text-sm text-gray-500">
+                        Personal and contact information
+                    </p>
+                </div>
 
-                <div className="border-2 border-blue-300 bg-blue-50 rounded-xl px-2 md:px-7 py-5">
-                    <div className="flex gap-y-3 gap-x-5 flex-wrap">
+                <div className="p-5 md:p-6">
+                    <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
                         <DetailField
                             label="First name"
                             value={student?.firstName}
@@ -89,16 +97,21 @@ const StudentPersonalDetails = ({
                         />
                     </div>
                 </div>
-            </div>
+            </section>
 
             {/* COURSE DETAILS */}
-            <div className="mt-5">
-                <h1 className="ps-3 text-lg font-semibold">
-                    COURSE DETAILS
-                </h1>
+            <section className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div className="border-b border-gray-100 px-5 py-4 md:px-6">
+                    <h1 className="text-base font-semibold text-gray-900">
+                        Course Details
+                    </h1>
+                    <p className="mt-1 text-sm text-gray-500">
+                        Course and duration information
+                    </p>
+                </div>
 
-                <div className="border-2 border-green-300 bg-green-50 rounded-xl px-2 md:px-7 py-5">
-                    <div className="flex gap-y-3 gap-x-5 flex-wrap">
+                <div className="p-5 md:p-6">
+                    <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
                         <DetailField
                             label="Course name"
                             value={student?.course?.courseName}
@@ -114,16 +127,21 @@ const StudentPersonalDetails = ({
                         />
                     </div>
                 </div>
-            </div>
+            </section>
 
             {/* ADDRESS DETAILS */}
-            <div className="mt-5">
-                <h1 className="ps-3 text-lg font-semibold">
-                    ADDRESS DETAILS
-                </h1>
+            <section className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div className="border-b border-gray-100 px-5 py-4 md:px-6">
+                    <h1 className="text-base font-semibold text-gray-900">
+                        Address Details
+                    </h1>
+                    <p className="mt-1 text-sm text-gray-500">
+                        Residential address information
+                    </p>
+                </div>
 
-                <div className="border-2 border-orange-200 bg-orange-50 rounded-xl px-2 md:px-7 py-5">
-                    <div className="flex gap-y-3 gap-x-5 flex-wrap">
+                <div className="p-5 md:p-6">
+                    <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
                         <DetailField
                             label="House name"
                             value={student?.address?.houseName}
@@ -155,16 +173,21 @@ const StudentPersonalDetails = ({
                         />
                     </div>
                 </div>
-            </div>
+            </section>
 
             {/* ACADEMIC DETAILS */}
-            <div className="mt-5">
-                <h1 className="ps-3 text-lg font-semibold">
-                    ACADEMIC DETAILS
-                </h1>
+            <section className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div className="border-b border-gray-100 px-5 py-4 md:px-6">
+                    <h1 className="text-base font-semibold text-gray-900">
+                        Academic Details
+                    </h1>
+                    <p className="mt-1 text-sm text-gray-500">
+                        Educational background and qualifications
+                    </p>
+                </div>
 
-                <div className="border-2 border-yellow-300 bg-yellow-50 rounded-xl px-2 md:px-7 py-5">
-                    <div className="flex gap-y-3 gap-x-5 flex-wrap">
+                <div className="p-5 md:p-6">
+                    <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
                         <DetailField
                             label="Institution / College"
                             value={student?.education?.institution}
@@ -191,8 +214,8 @@ const StudentPersonalDetails = ({
                         />
                     </div>
                 </div>
-            </div>
-        </>
+            </section>
+        </div>
     );
 };
 

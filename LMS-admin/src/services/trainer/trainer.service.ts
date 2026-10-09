@@ -242,7 +242,10 @@ export const getStudentAssignments = async (
     `/student/${studentId}/assignment`
   );
 
-  return response.data.data;
+
+
+
+  return response.data;
 };
 
 export const deleteStudentAssignment = async (
@@ -259,31 +262,31 @@ export const deleteStudentAssignment = async (
 
 
 export interface BatchSchedule {
-    _id: string;
-    batchCode: string;
-    batchName: string;
-    startTime: string;
-    endTime: string;
-    course?: {
-        courseName?: string;
-    };
+  _id: string;
+  batchCode: string;
+  batchName: string;
+  startTime: string;
+  endTime: string;
+  course?: {
+    courseName?: string;
+  };
 }
 
 interface GetMentorBatchesParams {
-    mentorId: string;
-    day: string;
+  mentorId: string;
+  day: string;
 }
 
 export const getMentorBatchesByDay = async ({
-    mentorId,
-    day,
+  mentorId,
+  day,
 }: GetMentorBatchesParams): Promise<BatchSchedule[]> => {
-    const response = await api.get("/batch", {
-        params: {
-            mentorId,
-            day,
-        },
-    });
+  const response = await api.get("/batch", {
+    params: {
+      mentorId,
+      day,
+    },
+  });
 
-    return response.data.data;
+  return response.data.data;
 };

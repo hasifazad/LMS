@@ -14,6 +14,7 @@ import { getMentorBatchesByDay, BatchSchedule } from "../../services/trainer/tra
 import noclass from "../../assets/noimage.avif";
 import Loading from "../../components/common/Loading";
 import { useTrainerAuthStore } from "../../stores/trainerAuthStore";
+import AttendanceModal from "../../components/trainer/AttendanceModal";
 
 const Dashboard: React.FC = () => {
     const { trainer: mentor } = useTrainerAuthStore(state => state)
@@ -259,8 +260,9 @@ const Dashboard: React.FC = () => {
                                 </Link>
 
                                 {/* Attendance */}
-                                <div className="mt-5 border-t pt-4">
-                                    {/* <AttendanceModal batchId={batch._id} /> */}
+                                <div>
+                                    <AttendanceModal batchId={batch._id} />
+
                                 </div>
 
                             </div>

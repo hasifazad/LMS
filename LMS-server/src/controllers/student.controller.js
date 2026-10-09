@@ -1276,12 +1276,20 @@ module.exports = {
         const { studentId } = req.params;
         const moduleData = req.body;
 
+        console.log(req.params);
+        console.log(req.body);
+
+       
+
         try {
             const updatedCourse = await StudentCourse(req.db).findOneAndUpdate(
                 { studentId }, // find course by studentId
                 { $push: { modules: moduleData } }, // push new module
-                { new: true, runValidators: true }
+                { new: true }
             );
+
+            console.log(updatedCourse);
+
 
             if (!updatedCourse) {
                 return res.status(404).json({ message: 'Student course not found' });

@@ -25,8 +25,14 @@ import {
 // import StudentCourse from "../components/trainer/student/StudentCourse";
 // import StudentProject from "../components/trainer/student/StudentProject";
 import Loading from "../../components/common/Loading";
+import StudentPersonalDetails from "../../components/trainer/Student";
+import StudentAssignment from "../../components/trainer/Assignement";
+import StudentAttendance from "../../components/trainer/StudentAttendance";
+import { StudentProject } from "../../components/trainer/StudentProject";
+import { StudentCourse } from "../../components/trainer/StudentCourse";
 
-interface StudentObject {
+
+export interface StudentObject {
     _id: string;
     firstName: string;
     lastName: string;
@@ -254,9 +260,8 @@ const StudentDetailsPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Tab Content */}
-            {/* {tab === "personal" && (
-                <Student student={student} />
+            {tab === "personal" && (
+                <StudentPersonalDetails student={student} />
             )}
 
             {tab === "assignment" && id && (
@@ -267,13 +272,26 @@ const StudentDetailsPage: React.FC = () => {
                 <StudentAttendance studentId={id} />
             )}
 
+            {tab === "project" && id && (
+                <StudentProject studentId={id} />
+            )}
+
             {tab === "course" && id && (
                 <StudentCourse studentId={id} />
             )}
 
-            {tab === "project" && id && (
-                <StudentProject studentId={id} />
-            )} */}
+            {/* Tab Content */}
+            {/* {tab === "personal" && (
+                <Student student={student} />
+            )}
+
+           
+
+            
+
+            
+
+             */}
         </section>
     );
 };

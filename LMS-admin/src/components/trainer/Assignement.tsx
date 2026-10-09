@@ -1,247 +1,207 @@
-import { useEffect, useState } from "react";
-import { Plus, Trash2, ClipboardList, Pencil } from "lucide-react";
-import toast from "react-hot-toast";
+import React, { useEffect, useState } from "react";
+import { converToDate } from "../../utils/DateFormatConverter";
 
 
-// import AddAssignment from "./AddAssignment";
-
-import {
-    getStudentAssignments,
-    deleteStudentAssignment,
-} from "../../services/trainer/trainer.service";
-import Loading from "../common/Loading";
 import AddAssignment from "./AddAssignment";
+import { getStudentAssignments } from "../../services/trainer/trainer.service";
+import Loading from "../common/Loading";
+import api from "../../services/api";
 
 interface StudentAssignmentProps {
     studentId: string;
 }
 
-interface Assignment {
-    _id: string;
-    title: string;
-    description?: string;
-    dueDate?: string;
-    status?: string;
-    marks?: number;
-}
-
 const StudentAssignment = ({ studentId }: StudentAssignmentProps) => {
-    const [assignments, setAssignments] = useState<Assignment[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [showAddAssignment, setShowAddAssignment] = useState(false);
-    const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [assignment, setAssignment] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [refresh, setRefresh] = useState(false);
 
-    const fetchAssignments = async () => {
-        try {
-            setLoading(true);
-
-            const data = await getStudentAssignments(studentId);
-
-            setAssignments(Array.isArray(data) ? data : []);
-        } catch (error) {
-            console.error("Failed to fetch assignments:", error);
-            toast.error("Failed to load assignments");
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const user = useSelector((state: any) => state.user.value);
 
     useEffect(() => {
+        const fetchAssignments = async () => {
+            setIsLoading(true);
+        
+
+            try {
+                const result = await getStudentAssignments(studentId);
+
+               
+
+                setAssignment(result.data);
+            } catch (error) {
+                console.error("Failed to fetch assignments:", error);
+                setAssignment([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
         fetchAssignments();
-    }, [studentId]);
+    }, [studentId, refresh]);
 
-    const handleDelete = async (assignmentId: string) => {
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this assignment?"
-        );
-
-        if (!confirmed) return;
-
+    const handleDelete = async (id: string) => {
         try {
-            setDeletingId(assignmentId);
-
-            await deleteStudentAssignment(studentId, assignmentId);
-
-            setAssignments((prev) =>
-                prev.filter((assignment) => assignment._id !== assignmentId)
-            );
-
-            toast.success("Assignment deleted successfully");
+            await api.delete(`/student/${studentId}/assignment/${id}`);
+            setRefresh((prev) => !prev);
         } catch (error) {
             console.error("Failed to delete assignment:", error);
-            toast.error("Failed to delete assignment");
-        } finally {
-            setDeletingId(null);
         }
     };
 
-    const formatDate = (date?: string) => {
-        if (!date) return "-";
-
-        return new Date(date).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-        });
-    };
-
-    if (loading) {
-        return (
-            <div className="flex justify-center py-16">
-                <Loading />
-            </div>
-        );
+    if (isLoading) {
+        return <Loading />
     }
 
     return (
-        <div className="space-y-5">
-            {/* Header */}
-            <div className="flex items-center justify-between">
+        <div className="mt-6">
+            {/* HEADER */}
+            <div className="mb-4 flex items-center justify-between">
                 <div>
-                    <h2 className="text-lg font-semibold text-gray-900">
-                        Assignments
-                    </h2>
-
+                    <h1 className="text-lg font-semibold text-gray-900">
+                        Assignment List
+                    </h1>
                     <p className="mt-1 text-sm text-gray-500">
-                        Manage assignments assigned to this student
+                        View and manage student assignments.
                     </p>
                 </div>
 
-                <button
-                    type="button"
-                    onClick={() => setShowAddAssignment(true)}
-                    className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
-                >
-                    <Plus size={17} />
-                    Add Assignment
-                </button>
+                <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-600">
+                    {assignment.length} assignments
+                </span>
             </div>
 
-            {/* Assignment List */}
+            {/* ASSIGNMENT TABLE */}
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-                {assignments.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-                        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
-                            <ClipboardList
-                                size={22}
-                                className="text-gray-500"
-                            />
-                        </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full min-w-[900px] text-left text-sm">
+                        <thead className="border-b border-gray-200 bg-gray-50">
+                            <tr>
+                                <th className="px-5 py-4 font-medium text-gray-600">
+                                    Title
+                                </th>
+                                <th className="px-5 py-4 font-medium text-gray-600">
+                                    Status
+                                </th>
+                                <th className="px-5 py-4 font-medium text-gray-600">
+                                    Start Date
+                                </th>
+                                <th className="px-5 py-4 font-medium text-gray-600">
+                                    Submission Date
+                                </th>
+                                <th className="px-5 py-4 font-medium text-gray-600">
+                                    Mark
+                                </th>
+                                <th className="px-5 py-4 font-medium text-gray-600">
+                                    File
+                                </th>
+                                <th className="px-5 py-4 text-right font-medium text-gray-600">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
 
-                        <h3 className="text-sm font-semibold text-gray-900">
-                            No assignments
-                        </h3>
+                        <tbody className="divide-y divide-gray-100">
+                            {assignment.map((item: any) => (
+                                <tr
+                                    key={item._id}
+                                    className="transition-colors hover:bg-gray-50"
+                                >
+                                    <td className="px-5 py-4 font-medium text-gray-900">
+                                        {item.title}
+                                    </td>
 
-                        <p className="mt-1 text-sm text-gray-500">
-                            No assignments have been added for this student.
-                        </p>
-                    </div>
-                ) : (
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left">
-                            <thead className="border-b border-gray-200 bg-gray-50">
-                                <tr>
-                                    <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                        Assignment
-                                    </th>
+                                    <td className="px-5 py-4">
+                                        <span className="inline-flex rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium capitalize text-gray-700">
+                                            {item.status || "Not available"}
+                                        </span>
+                                    </td>
 
-                                    <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                        Due Date
-                                    </th>
+                                    <td className="whitespace-nowrap px-5 py-4 text-gray-600">
+                                        {item.startDate
+                                            ? converToDate(item.startDate)
+                                            : "—"}
+                                    </td>
 
-                                    <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                        Status
-                                    </th>
+                                    <td className="whitespace-nowrap px-5 py-4 text-gray-600">
+                                        {item.submissionDate
+                                            ? converToDate(item.submissionDate)
+                                            : "—"}
+                                    </td>
 
-                                    <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                        Marks
-                                    </th>
+                                    <td className="px-5 py-4 text-gray-700">
+                                        {item.grade ?? "—"}
+                                    </td>
 
-                                    <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-
-                            <tbody className="divide-y divide-gray-100">
-                                {assignments.map((assignment) => (
-                                    <tr
-                                        key={assignment._id}
-                                        className="transition hover:bg-gray-50"
-                                    >
-                                        <td className="px-5 py-4">
-                                            <div className="font-medium text-gray-900">
-                                                {assignment.title}
-                                            </div>
-
-                                            {assignment.description && (
-                                                <div className="mt-1 max-w-md truncate text-sm text-gray-500">
-                                                    {assignment.description}
-                                                </div>
-                                            )}
-                                        </td>
-
-                                        <td className="whitespace-nowrap px-5 py-4 text-sm text-gray-600">
-                                            {formatDate(assignment.dueDate)}
-                                        </td>
-
-                                        <td className="px-5 py-4">
-                                            <span className="inline-flex rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium capitalize text-gray-700">
-                                                {assignment.status || "Pending"}
+                                    <td className="px-5 py-4">
+                                        {item.fileUrl ? (
+                                            <a
+                                                href={item.fileUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="font-medium text-blue-600 hover:text-blue-800 hover:underline"
+                                            >
+                                                Open file
+                                            </a>
+                                        ) : (
+                                            <span className="text-gray-400">
+                                                No file
                                             </span>
-                                        </td>
+                                        )}
+                                    </td>
 
-                                        <td className="px-5 py-4 text-sm text-gray-600">
-                                            {assignment.marks ?? "-"}
-                                        </td>
+                                    <td className="px-5 py-4">
+                                        <div className="flex justify-end gap-2">
+                                            <button
+                                                type="button"
+                                                className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+                                            // onClick={() => handleUpdate(item._id)}
+                                            >
+                                                Update
+                                            </button>
 
-                                        <td className="px-5 py-4">
-                                            <div className="flex justify-end gap-2">
-                                                <button
-                                                    type="button"
-                                                    className="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900"
-                                                    title="Edit assignment"
-                                                >
-                                                    <Pencil size={16} />
-                                                </button>
+                                            <button
+                                                type="button"
+                                                className="rounded-lg border border-red-200 px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-50"
+                                                onClick={() =>
+                                                    handleDelete(item._id)
+                                                }
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
 
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        handleDelete(
-                                                            assignment._id
-                                                        )
-                                                    }
-                                                    disabled={
-                                                        deletingId ===
-                                                        assignment._id
-                                                    }
-                                                    className="rounded-lg p-2 text-gray-500 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
-                                                    title="Delete assignment"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+                            {assignment.length === 0 && (
+                                <tr>
+                                    <td
+                                        colSpan={7}
+                                        className="px-5 py-12 text-center"
+                                    >
+                                        <p className="font-medium text-gray-700">
+                                            No assignments available
+                                        </p>
+                                        <p className="mt-1 text-sm text-gray-500">
+                                            Assignments will appear here when
+                                            they are added.
+                                        </p>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* ADD ASSIGNMENT */}
+                <div className="border-t border-gray-200 bg-gray-50/50 p-5">
+                    <AddAssignment
+                        studentId={studentId}
+                        refresh={{ refresh, setRefresh }}
+                    />
+                </div>
             </div>
-
-            {/* Add Assignment */}
-            {showAddAssignment && (
-                <AddAssignment
-                    studentId={studentId}
-                    onClose={() => setShowAddAssignment(false)}
-                    onSuccess={() => {
-                        setShowAddAssignment(false);
-                        fetchAssignments();
-                    }}
-                />
-            )}
         </div>
     );
 };
