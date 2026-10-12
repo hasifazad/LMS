@@ -4,14 +4,35 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { toast } from "react-hot-toast";
-
+import * as yup from "yup";
 import { useAuthStore } from "../../stores/authStore";
 import {
     trainerLogin,
-    type TrainerLoginData,
+    // type TrainerLoginData,
 } from "../../services/trainer/trainer.service";
-import { trainerLoginSchema } from "../../validation/trainer.validation";
+// import { trainerLoginSchema } from "../../validation/trainer.validation";
 import { useTrainerAuthStore } from "../../stores/trainerAuthStore";
+
+type TrainerLoginData = {
+    email?: string;
+    password?: string;
+};
+
+
+const trainerLoginSchema: yup.ObjectSchema<TrainerLoginData> = yup.object({
+    email: yup
+        .string()
+        .email("Enter a valid email address")
+        .required("Email is required"),
+
+    password: yup
+        .string()
+        .required("Password is required"),
+});
+
+
+
+
 
 const LoginPage: React.FC = () => {
 

@@ -46,8 +46,8 @@ export const getMentorById = async (
 
 
 export interface TrainerLoginData {
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
 }
 
 export const trainerLogin = async (data: TrainerLoginData) => {
