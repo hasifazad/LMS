@@ -14,7 +14,7 @@ import App from './App.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter basename="/trainer-portal">
             <App />
         </BrowserRouter>
     </Provider>
