@@ -33,6 +33,15 @@ let emailTemplate = require('../utils/email-templates')
 let transporter = require('../utils/email-transporter');
 const batchModel = require("../models/batch.model");
 
+function generateStudentCode(studentNumber) {
+    const date = new Date();
+
+    const year = String(date.getFullYear()).slice(-2);
+    const studentId = 1000 + studentNumber;
+
+    return `EJ${year}MSB${studentId}`;
+}
+
 
 module.exports = {
     /**
@@ -42,8 +51,6 @@ module.exports = {
      * @access  Private
      */
     createStudent: async (req, res, next) => {
-
-        console.log(req.body);
 
         let { firstName, lastName, email, mobileNumber, joiningDate, courseId } = req.body
 
@@ -63,10 +70,7 @@ module.exports = {
 
             const studentCount = await Student(req.db).find().count()
 
-            console.log(studentCount);
-
-
-            const enrollmentNumber = "STU" + studentCount;
+            const enrollmentNumber = generateStudentCode(studentCount)
 
             let stud = await Student(req.db).create({
                 firstName,
@@ -78,17 +82,10 @@ module.exports = {
                 courseId
             })
 
-
-            console.log(joiningDate);
-
             await StudentCourse(req.db).create({
                 studentId: stud._id,
                 startDate: joiningDate
             })
-
-            console.log(password);
-
-
 
             // Mail options
             // const mailOptions = {
@@ -1279,7 +1276,7 @@ module.exports = {
         console.log(req.params);
         console.log(req.body);
 
-       
+
 
         try {
             const updatedCourse = await StudentCourse(req.db).findOneAndUpdate(

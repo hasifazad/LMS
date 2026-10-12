@@ -44,6 +44,7 @@ const StudentsPage: React.FC = () => {
                     trainer._id
                 );
 
+
                 if (active) {
                     setStudentsList(students);
                 }
@@ -233,24 +234,24 @@ const StudentsPage: React.FC = () => {
                                     {/* Batch */}
                                     <div className="hidden w-32 sm:block">
                                         <p className="text-[11px] uppercase tracking-wide text-gray-400">
-                                            Batch
+                                            Enrollment Number
                                         </p>
 
                                         <p className="mt-1 truncate text-sm text-gray-700">
-                                            {student.batch
-                                                ?.batchCode || "N/A"}
+                                            {student?.enrollmentNumber
+                                                || "N/A"}
                                         </p>
                                     </div>
 
                                     {/* Course */}
                                     <div className="hidden w-48 md:block">
                                         <p className="text-[11px] uppercase tracking-wide text-gray-400">
-                                            Course
+                                            Status
                                         </p>
 
                                         <p className="mt-1 truncate text-sm text-gray-700">
-                                            {student.course
-                                                ?.courseName ||
+                                            {student?.status
+                                                ||
                                                 "N/A"}
                                         </p>
                                     </div>

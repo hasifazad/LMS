@@ -63,6 +63,8 @@ export interface Student {
   lastName?: string;
   email?: string;
   profilePicture?: string;
+  enrollmentNumber?: string;
+  status?: string;
   batch?: {
     batchCode?: string;
   };

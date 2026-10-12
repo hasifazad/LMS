@@ -167,12 +167,7 @@ const BatchDetailsPage: React.FC = () => {
                         value={converToDate(batch.endDate)}
                     />
 
-                    {/* Mentor */}
-                    <InfoItem
-                        icon={<UserRound />}
-                        label="Mentor"
-                        value={`${batch.mentor?.firstName || ""} ${batch.mentor?.lastName || ""}`}
-                    />
+                   
 
                 </div>
 

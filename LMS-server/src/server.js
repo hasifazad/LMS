@@ -70,6 +70,7 @@ const courseRoutes = require('./routes/course.routes');
 const organisationRoutes = require('./routes/organisation.routes');
 const feedbackRoutes = require("./routes/feedback.routes");
 const adminRoutes = require('./routes/admin.routes');
+const { Student } = require('./models/student.model');
 
 
 
@@ -89,11 +90,8 @@ app.use('/api/v1/admin', adminRoutes);
 app.use("/api/v1/feedback", feedbackRoutes);
 
 
-
 app.get('/test', (req, res) => {
-
-    res.send('hello from server')
-
+    res.json('hi,this is from server')
 })
 
 
